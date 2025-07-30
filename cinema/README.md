@@ -1,3 +1,5 @@
+# WebCinemaBooking
+
 # Cinema Management System
 
 A comprehensive web-based cinema management system built with Flask, MongoDB, and modern frontend technologies. This system provides complete management capabilities for movie theaters, including ticket booking, staff management, and revenue reporting.
@@ -69,13 +71,12 @@ A comprehensive web-based cinema management system built with Flask, MongoDB, an
 ### Prerequisites
 - Python 3.8+
 - MongoDB 4.4+
-- Node.js (for development)
 
 ### Setup Instructions
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone 
    cd cinema
    ```
 
@@ -103,7 +104,7 @@ A comprehensive web-based cinema management system built with Flask, MongoDB, an
 
 6. **Access the application**
    - Open browser: `http://localhost:5001`
-   - Default admin credentials: admin/admin123
+   - Default admin credentials: admin/123
 
 ## 📁 Project Structure
 
@@ -258,10 +259,9 @@ mongodump --db cinema_db --out backup/
 
 ### Production Setup
 1. **Server Requirements**
-   - Ubuntu 20.04+ / CentOS 8+
    - Python 3.8+
    - MongoDB 4.4+
-   - Nginx (reverse proxy)
+
 
 2. **Environment Configuration**
    ```bash
@@ -275,17 +275,6 @@ mongodump --db cinema_db --out backup/
    sudo systemctl enable cinema
    sudo systemctl start cinema
    ```
-
-### Docker Deployment
-```dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-EXPOSE 5001
-CMD ["python", "run.py"]
-```
 
 ## 📈 Performance
 
