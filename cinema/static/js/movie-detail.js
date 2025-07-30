@@ -43,39 +43,32 @@ async function getMovieById(id) {
   
   try {
     console.log('📡 Fetching from API...');
-    const response = await fetch(`/api/movies/showing?per_page=100`);
+    const response = await fetch(`/api/movies/${id}`);
     console.log('📥 Response status:', response.status);
     
-    const data = await response.json();
-    console.log('📋 API data:', data);
-    
-    if (data.success && data.movies) {
-      console.log('🎬 Looking for movie with id:', id);
-      console.log('📽️ Available movies:', data.movies.map(m => ({ id: m.id, title: m.title })));
-      
-      const movie = data.movies.find(m => m.id === id);
+    if (response.ok) {
+      const movie = await response.json();
       console.log('🎯 Found movie:', movie);
       
-      if (movie) {
-        return {
-          id: movie.id,
-          title: movie.title,
-          poster: movie.poster_url,
-          genre: movie.genre,
-          description: movie.description || 'Không có mô tả.',
-          director: movie.director || 'Unknown',
-          cast: movie.cast || 'Unknown',
-          trailer: convertToEmbedUrl(movie.trailer_url || movie.trailer || '')
-        };
-      }
+      return {
+        id: movie.id || id,
+        title: movie.title,
+        poster: movie.poster_url,
+        genre: movie.genre,
+        description: movie.description || 'Không có mô tả.',
+        director: movie.director || 'Unknown',
+        cast: movie.cast || 'Unknown',
+        trailer: convertToEmbedUrl(movie.trailer_url || movie.trailer || '')
+      };
+    } else {
+      console.log('❌ Movie not found in API');
     }
   } catch (error) {
     console.error('❌ Error fetching movie:', error);
   }
   
-  console.log('🔄 Falling back to hardcoded list...');
-  // Fallback to hardcoded list
-  return null; // No hardcoded list, so return null
+  console.log('🔄 Movie not found, returning null');
+  return null;
 }
 
 async function renderMovieDetail(movie) {

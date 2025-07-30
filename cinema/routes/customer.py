@@ -130,12 +130,71 @@ def view_profile(current_user):
 # 4. Get movies with showtimes
 @customer_bp.route("/api/movies", methods=["GET"])
 def get_movies():
+    # Get query parameters
+    status = request.args.get('status')
+    genre = request.args.get('genre')
+    country = request.args.get('country')
+    year = request.args.get('year')
+    sort = request.args.get('sort')
+    page = int(request.args.get('page', 1))
+    limit = int(request.args.get('limit', 10))
+    
+    # Build filter query
+    filter_query = {}
+    
+    if status:
+        if status == "Coming Soon":
+            filter_query["status"] = {"$in": ["Coming Soon", "coming_soon"]}
+        elif status == "showing":
+            filter_query["status"] = {"$in": ["showing", "Active"]}
+        else:
+            filter_query["status"] = status
+    
+    if genre:
+        filter_query["genre"] = genre
+    
+    if country:
+        filter_query["country"] = country
+    
+    if year:
+        filter_query["release_date"] = {"$regex": f"^{year}"}
+    
+    # If no status filter, get all movies
+    if not status:
+        filter_query = {}
+    
     movies = []
     if db is not None:
-        movies = list(db.movies.find({"status": "Active"}))
+        # Apply sorting
+        sort_query = []
+        if sort == "views":
+            sort_query.append(("views", -1))
+        elif sort == "rating":
+            sort_query.append(("rating", -1))
+        elif sort == "release_date":
+            sort_query.append(("release_date", -1))
+        
+        # Get total count for pagination
+        total_movies = db.movies.count_documents(filter_query)
+        total_pages = (total_movies + limit - 1) // limit
+        
+        # Get movies with pagination
+        cursor = db.movies.find(filter_query)
+        if sort_query:
+            cursor = cursor.sort(sort_query)
+        cursor = cursor.skip((page - 1) * limit).limit(limit)
+        
+        movies = list(cursor)
         for m in movies:
             m["_id"] = str(m["_id"])
-    return jsonify(movies), 200
+    
+    # Return with pagination info
+    return jsonify({
+        "movies": movies,
+        "page": page,
+        "totalPages": total_pages,
+        "totalMovies": total_movies
+    }), 200
 
 # 5. Book multiple seats
 @customer_bp.route("/api/book-multi", methods=["POST"])
@@ -349,7 +408,9 @@ def payment(current_user):
             seat_code = seat["seat_code"] if seat else "A1"
             
             # Generate barcode data từ thông tin thật
-            barcode_data = f"{showtime['cinema_name'][:2].upper()}{showtime['movie_id'][:4].upper()}{seat_code}{showtime['hall_name'][-1]}{showtime['date'].replace('-', '')}"
+            cinema_code = showtime.get('cinema', 'CN')[:2].upper()
+            hall_code = showtime.get('hall', 'H1')[-1]
+            barcode_data = f"{cinema_code}{showtime['movie_id'][:4].upper()}{seat_code}{hall_code}{showtime['date'].replace('-', '')}"
             
             ticket = {
                 "_id": ticket_id,
@@ -1068,8 +1129,8 @@ def get_showing_movies():
         # Tính toán skip
         skip = (page - 1) * per_page
         
-        # Tạo query filter
-        filter_query = {'status': 'showing'}
+        # Tạo query filter - chỉ lấy movies có status showing/Active
+        filter_query = {'status': {'$in': ['showing', 'Active']}}
         if search:
             filter_query['title'] = {'$regex': search, '$options': 'i'}
         
@@ -1138,8 +1199,8 @@ def get_coming_soon_movies():
         # Tính toán skip
         skip = (page - 1) * per_page
         
-        # Tạo query filter
-        filter_query = {'status': 'coming_soon'}
+        # Tạo query filter - hỗ trợ cả 'coming_soon' và 'Coming Soon'
+        filter_query = {'status': {'$in': ['coming_soon', 'Coming Soon']}}
         if search:
             filter_query['title'] = {'$regex': search, '$options': 'i'}
         
@@ -1224,7 +1285,12 @@ def get_movie_by_id(movie_id):
             'rating': movie.get('rating', ''),
             'status': movie.get('status', ''),
             'release_date': movie.get('release_date', ''),
-            'genres': movie.get('genres', [])
+            'genres': movie.get('genres', []),
+            'director': movie.get('director', 'Unknown'),
+            'cast': movie.get('cast', 'Unknown'),
+            'trailer_url': movie.get('trailer_url', ''),
+            'age_rating': movie.get('age_rating', 'K'),
+            'views': movie.get('views', 0)
         }
         
         return jsonify(formatted_movie)
@@ -1279,63 +1345,86 @@ def cinema_page():
     return render_template('cinema.html')
 
 @customer_bp.route('/api/cinema/<cinema_id>')
-def api_cinema_info(cinema_id):
-    cinemas = {
-        "storia_sg": {
-            "id": "storia_sg",
-            "name": "Storia Sài Gòn",
-            "address": "116 Nguyễn Du, Quận 1, Tp.HCM",
-            "phone": "1900 2224",
-            "description": "Storia Sài Gòn là một trong những rạp chiếu phim thuộc hệ thống Storia Cinema, chính thức đi vào hoạt động từ năm 2005. Đây là một trong những tổ hợp rạp chiếu phim tiêu chuẩn quốc tế đầu tiên tại Việt Nam với hệ thống phòng chiếu hiện đại, âm thanh chất lượng cao và hình ảnh sắc nét."
-        },
-        "storia_hn": {
-            "id": "storia_hn",
-            "name": "Storia Hà Nội",
-            "address": "123 Đường Láng, Đống Đa, Hà Nội",
-            "phone": "1900 2225",
-            "description": "Storia Hà Nội là một trong những rạp chiếu phim thuộc hệ thống Storia Cinema, phục vụ khán giả thủ đô với chất lượng dịch vụ và trải nghiệm điện ảnh tuyệt vời."
-        }
-    }
-    return jsonify(cinemas.get(cinema_id, {}))
-
-@customer_bp.route('/api/cinema/<cinema_id>/showtimes')
-def api_cinema_showtimes(cinema_id):
-    # Map cinema_id sang tên rạp
-    cinema_map = {
-        'storia_sg': 'Storia Sài Gòn',
-        'storia_hn': 'Storia Hà Nội'
-    }
-    cinema_name = cinema_map.get(cinema_id, '')
-    showtimes = []
-    if db is not None and cinema_name:
-        showtimes = list(db.showtimes.find({"cinema": cinema_name}))
-        for s in showtimes:
-            s["_id"] = str(s["_id"])
-    return jsonify(showtimes)
+def get_cinema_info(cinema_id):
+    """API để lấy thông tin cinema"""
+    try:
+        cinema = db.cinemas.find_one({'_id': cinema_id})
+        if not cinema:
+            return jsonify({
+                'success': False,
+                'error': 'Cinema not found'
+            }), 404
+        
+        return jsonify(cinema)
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
 
 @customer_bp.route('/api/cinema/<cinema_id>/movies')
-def api_cinema_movies(cinema_id):
-    from bson import ObjectId
-    # Map cinema_id sang tên rạp
-    cinema_map = {
-        'storia_sg': 'Storia Sài Gòn',
-        'storia_hn': 'Storia Hà Nội'
-    }
-    cinema_name = cinema_map.get(cinema_id, '')
-    movies = []
-    if db is not None and cinema_name:
-        # Lấy tất cả phim có suất chiếu tại rạp này
-        showtimes = list(db.showtimes.find({"cinema": cinema_name}))
-        movie_ids = list({st["movie_id"] for st in showtimes if "movie_id" in st})
-        movies = list(db.movies.find({"_id": {"$in": movie_ids}}))
-        for m in movies:
-            if not m.get('poster_url'):
-                m['poster_url'] = m.get('poster', '/static/img/showing_movie1.jpg')
-            if 'views' not in m:
-                m['views'] = 0
-            if isinstance(m.get('_id'), ObjectId):
-                m['_id'] = str(m['_id'])
-    return jsonify(movies)
+def get_cinema_movies(cinema_id):
+    """API để lấy movies cho cinema"""
+    try:
+        # Lấy tất cả movies (không filter theo status)
+        movies = list(db.movies.find({}, {
+            '_id': 1, 'title': 1, 'poster_url': 1, 'poster': 1, 
+            'thumbnail_url': 1, 'description': 1, 'genre': 1, 'status': 1
+        }))
+        
+        # Format dữ liệu
+        formatted_movies = []
+        for movie in movies:
+            formatted_movie = {
+                '_id': str(movie['_id']),
+                'title': movie.get('title', 'Unknown'),
+                'poster_url': movie.get('poster_url') or movie.get('poster') or '/static/img/showing_movie1.jpg',
+                'poster': movie.get('poster_url') or movie.get('poster') or '/static/img/showing_movie1.jpg',
+                'thumbnail_url': movie.get('thumbnail_url'),
+                'description': movie.get('description', ''),
+                'genre': movie.get('genre', 'Unknown')
+            }
+            formatted_movies.append(formatted_movie)
+        
+        return jsonify(formatted_movies)
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@customer_bp.route('/api/cinema/<cinema_id>/showtimes')
+def get_cinema_showtimes(cinema_id):
+    """API để lấy showtimes cho cinema"""
+    try:
+        # Lấy showtimes cho cinema này
+        showtimes = list(db.showtimes.find({'cinema_id': cinema_id}, {
+            '_id': 1, 'movie_id': 1, 'date': 1, 'time': 1, 'hall_name': 1
+        }))
+        
+        # Format dữ liệu
+        formatted_showtimes = []
+        for showtime in showtimes:
+            formatted_showtime = {
+                '_id': str(showtime['_id']),
+                'movie_id': str(showtime.get('movie_id', '')),
+                'date': showtime.get('date', ''),
+                'time': showtime.get('time', ''),
+                'hall_name': showtime.get('hall_name', 'Unknown')
+            }
+            formatted_showtimes.append(formatted_showtime)
+        
+        return jsonify(formatted_showtimes)
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+# Removed duplicate routes - using the new ones above
 
 # Seat Locking APIs
 @customer_bp.route("/api/seat-locks/create", methods=["POST"])

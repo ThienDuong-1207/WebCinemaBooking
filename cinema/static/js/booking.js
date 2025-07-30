@@ -187,7 +187,7 @@ function updateBookingInfo() {
   const bookButton = document.getElementById('book-button');
   
   if (selectedSeats.size === 0) {
-    selectedSeatsList.textContent = 'Chưa chọn ghế nào';
+    selectedSeatsList.innerHTML = '<span class="text-muted">Chưa chọn ghế nào</span>';
     totalPriceElement.textContent = '0 VNĐ';
     bookButton.disabled = true;
     bookButton.classList.add('disabled');

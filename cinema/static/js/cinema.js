@@ -121,17 +121,33 @@ function updateLocationInfo(cinema) {
 
 // Cập nhật map
 function updateMap(cinema) {
-    const mapContainer = document.querySelector('.map-container iframe');
-    if (mapContainer) {
-        let mapUrl;
-        if (cinema.id === 'storia_sg') {
-            // Map cho Storia Sài Gòn
-            mapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.1234567890123!2d106.12345678901234!3d10.12345678901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDA3JzM0LjQiTiAxMDbCsDA3JzM0LjQiRQ!5e0!3m2!1svi!2s!4v1234567890123";
-        } else {
-            // Map cho Storia Hà Nội
-            mapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.1234567890123!2d105.12345678901234!3d21.12345678901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDA3JzM0LjQiTiAxMDXCsDA3JzM0LjQiRQ!5e0!3m2!1svi!2s!4v1234567890123";
-        }
-        mapContainer.src = mapUrl;
+    const mapContainer = document.querySelector('.map-container');
+    if (!mapContainer) return;
+    
+    if (cinema && cinema.map_url) {
+        // Sử dụng Google Maps embed
+        mapContainer.innerHTML = `
+            <iframe 
+                src="${cinema.map_url}"
+                width="100%" 
+                height="300" 
+                style="border:0; border-radius: 8px;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        `;
+    } else {
+        // Fallback với placeholder
+        mapContainer.innerHTML = `
+            <div style="width: 100%; height: 300px; border-radius: 8px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; border: 2px dashed #dee2e6;">
+                <div class="text-center text-muted">
+                    <i class="fas fa-map-marker-alt fa-3x mb-3"></i>
+                    <h5>${cinema ? cinema.name : 'Cinema'}</h5>
+                    <p class="mb-0">${cinema ? cinema.address : 'Address not available'}</p>
+                </div>
+            </div>
+        `;
     }
 }
 
