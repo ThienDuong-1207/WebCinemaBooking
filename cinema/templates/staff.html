@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Trang nhân viên - Storia</title>
+
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+    
+    <style>
+        :root {
+            --primary-color: #8B0000;
+            --primary-light: #A52A2A;
+            --primary-dark: #660000;
+            --secondary-color: #FF6B6B;
+            --accent-color: #FFE4E1;
+            --text-primary: #2C3E50;
+            --text-secondary: #7F8C8D;
+            --bg-light: #F8F9FA;
+            --bg-white: #FFFFFF;
+            --border-color: #E9ECEF;
+            --success-color: #28A745;
+            --warning-color: #FFC107;
+            --info-color: #17A2B8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Modern Layout */
+        .employee-layout {
+            display: flex;
+            min-height: 100vh;
+            background: var(--bg-light);
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-white);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.08);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* User Profile Section */
+        .sidebar-user {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-user img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 8px 25px rgba(139, 0, 0, 0.15);
+            margin-bottom: 1rem;
+            object-fit: cover;
+        }
+
+        .user-status {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-role {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Navigation Menu */
+        .sidebar-menu {
+            margin-bottom: 2rem;
+            flex: 1;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.3);
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+            font-size: 1rem;
+        }
+
+        /* Logout Section */
+        .sidebar-logout {
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+
+        .sidebar-logout hr {
+            border-color: var(--border-color);
+            opacity: 0.5;
+        }
+
+        .sidebar-logout .btn {
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.75rem 1rem;
+        }
+
+        .sidebar-logout .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem 2.5rem;
+            min-height: 100vh;
+            background: var(--bg-light);
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .stats-card.primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+        }
+
+        .stats-card.success {
+            background: linear-gradient(135deg, var(--success-color), #20C997);
+            color: white;
+        }
+
+        .stats-card.info {
+            background: linear-gradient(135deg, var(--info-color), #5BC0DE);
+            color: white;
+        }
+
+        .stats-card.warning {
+            background: linear-gradient(135deg, var(--warning-color), #FFD43B);
+            color: white;
+        }
+
+        /* Feature Cards */
+        .feature-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .feature-card .card-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Calendar Styling */
+        .calendar-container {
+            background: var(--bg-white);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+
+        .fc-event {
+            cursor: pointer;
+            border-radius: 8px !important;
+        }
+
+        .fc-event:hover {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+
+        .fc-header-toolbar {
+            margin-bottom: 1.5rem !important;
+        }
+
+        .fc-button {
+            border-radius: 8px !important;
+            font-weight: 500 !important;
+        }
+
+        .fc-button-primary {
+            background: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+        }
+
+        .fc-button-primary:hover {
+            background: var(--primary-light) !important;
+            border-color: var(--primary-light) !important;
+        }
+
+        /* Animation */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-pane.active {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        /* Logout Section */
+        .sidebar-logout {
+            margin-top: auto;
+            padding-top: 1rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logout hr {
+            border-color: var(--border-color);
+            opacity: 0.5;
+        }
+
+        .sidebar-logout .btn {
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.75rem 1rem;
+        }
+
+        .sidebar-logout .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        /* Đảm bảo modal đóng hoàn toàn */
+        .modal.fade:not(.show) {
+            display: none !important;
+        }
+        
+        .modal-backdrop.fade:not(.show) {
+            display: none !important;
+        }
+        
+        /* Đảm bảo body không bị scroll lock khi modal đóng */
+        body.modal-open {
+            overflow: auto !important;
+            padding-right: 0 !important;
+        }
+        
+        /* Force hide modal khi không active */
+        .modal:not(.show) {
+            display: none !important;
+            pointer-events: none !important;
+        }
+        
+        /* Force remove backdrop */
+        .modal-backdrop:not(.show) {
+            display: none !important;
+            opacity: 0 !important;
+        }
+        
+        /* Ensure modal doesn't block interactions */
+        .modal[aria-hidden="true"] {
+            display: none !important;
+            pointer-events: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="employee-layout">
+        <!-- Sidebar trái -->
+        <aside class="sidebar">
+            <!-- Phần thông tin user -->
+            <div class="sidebar-user">
+                <img src="/static/img/manager.jpg" alt="User Avatar">
+                <div class="user-status">Online</div>
+                <div class="user-name">Staff User</div>
+                <div class="user-role">Nhân viên</div>
+            </div>
+            
+            <!-- Phần menu -->
+            <div class="sidebar-menu">
+<nav class="nav flex-column">
+                    <a class="nav-link active" href="#dashboard" data-bs-toggle="tab">
+                        <i class="fas fa-home me-2"></i>Dashboard
+                    </a>
+                    <a class="nav-link" href="#calendar" data-bs-toggle="tab">
+                        <i class="fas fa-calendar-alt me-2"></i>Lịch làm việc
+                    </a>
+                    <a class="nav-link" href="#checkin" data-bs-toggle="tab">
+                        <i class="fas fa-qrcode me-2"></i>Check-in Vé
+                    </a>
+                    <a class="nav-link" href="#broken-seat" data-bs-toggle="tab">
+                        <i class="fas fa-chair me-2"></i>Báo cáo ghế hỏng
+                    </a>
+</nav>
+            </div>
+            
+            <!-- Phần logout -->
+            <div class="sidebar-logout">
+                <hr class="my-3">
+                <button id="logoutBtn" class="btn btn-outline-danger w-100">
+                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main content phải -->
+        <main class="main-content">
+            <div class="tab-content">
+                <!-- Dashboard Tab -->
+                <div class="tab-pane fade show active" id="dashboard">
+                    <div class="content-card">
+<h2 class="mb-4">Chào mừng nhân viên!</h2>
+                        <p class="text-muted mb-4">Đây là giao diện dành cho nhân viên rạp phim Storia.</p>
+
+<!-- Dashboard Stats -->
+                        <div class="row dashboard-stats">
+                            <div class="col-md-4 mb-3">
+                                <div class="stats-card primary">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-ticket-alt me-2"></i>Vé check-in hôm nay
+                                    </h5>
+                <h3 id="today-checkins">0</h3>
+            </div>
+        </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stats-card success">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-clock me-2"></i>Suất chiếu hiện tại
+                                    </h5>
+                <h3 id="current-shows">0</h3>
+            </div>
+        </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stats-card info">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-users me-2"></i>Khách hàng chờ
+                                    </h5>
+                <h3 id="waiting-customers">0</h3>
+            </div>
+        </div>
+    </div>
+
+                        <!-- Quick Actions -->
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="feature-card">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-rocket me-2"></i>Thao tác nhanh
+                                    </h5>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary" onclick="switchTab('checkin')">
+                                            <i class="fas fa-qrcode me-2"></i>Check-in vé ngay
+                                        </button>
+                                        <button class="btn btn-warning" onclick="switchTab('broken-seat')">
+                                            <i class="fas fa-chair me-2"></i>Báo cáo ghế hỏng
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-card">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-info-circle me-2"></i>Thông tin hữu ích
+                                    </h5>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Kiểm tra vé trước khi check-in</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Báo cáo ghế hỏng kịp thời</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Xem lịch làm việc hàng ngày</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar Tab -->
+                <div class="tab-pane fade" id="calendar">
+                    <div class="content-card">
+                        <h2 class="mb-4">
+                            <i class="fas fa-calendar-alt me-2"></i>Lịch làm việc
+                        </h2>
+                        <div class="calendar-container">
+                            <div id="full-calendar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Check-in Tab -->
+                <div class="tab-pane fade" id="checkin">
+                    <div class="content-card">
+                        <h2 class="mb-4">
+                            <i class="fas fa-qrcode me-2"></i>Check-in Vé
+                        </h2>
+                        
+                        <div class="text-center mb-4">
+                            <button type="button" class="btn btn-primary btn-lg" id="checkin-btn">
+                                <i class="fas fa-qrcode me-2"></i>Bắt đầu Check-in
+                            </button>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="feature-card">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-info-circle me-2"></i>Hướng dẫn
+                                    </h5>
+                                    <ul>
+                                        <li>Click "Bắt đầu Check-in" để mở camera</li>
+                                        <li>Quét mã QR code trên vé</li>
+                                        <li>Xác nhận thông tin vé</li>
+                                        <li>Hoàn tất check-in</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-card">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>Lưu ý
+                                    </h5>
+                                    <ul>
+                                        <li>Đảm bảo vé hợp lệ</li>
+                                        <li>Kiểm tra thời gian suất chiếu</li>
+                                        <li>Xác nhận đúng phòng chiếu</li>
+                                        <li>Báo cáo nếu có vấn đề</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Broken Seat Tab -->
+                <div class="tab-pane fade" id="broken-seat">
+                    <div class="content-card">
+                        <h2 class="mb-4">
+                            <i class="fas fa-chair me-2"></i>Báo cáo ghế hỏng
+                        </h2>
+                        
+                        <!-- Báo cáo ghế hỏng -->
+                        <div class="feature-card mb-4">
+                            <h5 class="card-title">
+                                <i class="fas fa-chair me-2"></i>Báo cáo ghế hỏng
+                            </h5>
+                            <form id="broken-seat-form">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label for="seat-id" class="form-label">Số ghế</label>
+                                        <input type="text" class="form-control" id="seat-id" name="seat_id" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="hall" class="form-label">Phòng chiếu</label>
+                                        <select class="form-select" id="hall" name="hall" required></select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="cinema" class="form-label">Rạp</label>
+                                        <select class="form-select" id="cinema" name="cinema" required></select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="report-time" class="form-label">Thời gian phát hiện</label>
+                                        <input type="datetime-local" class="form-control" id="report-time" name="report_time" required>
+                                    </div>
+                                </div>
+                                <div class="row g-3 mt-3">
+                                    <div class="col-12">
+                                        <label for="description" class="form-label">Mô tả lỗi</label>
+                                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="row g-3 mt-3">
+                                    <div class="col-12 text-end">
+                                        <button type="submit" class="btn btn-warning fw-bold">
+                                            <i class="fas fa-paper-plane me-2"></i>Gửi báo cáo
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Danh sách ghế hỏng -->
+                        <div class="feature-card">
+                            <h5 class="card-title">
+                                <i class="fas fa-list me-2"></i>Danh sách ghế hỏng đã báo cáo
+                            </h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Số ghế</th>
+                                            <th>Phòng chiếu</th>
+                                            <th>Rạp</th>
+                                            <th>Thời gian phát hiện</th>
+                                            <th>Mô tả lỗi</th>
+                                            <th>Người báo cáo</th>
+                                            <th>Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="broken-seat-table">
+                                        <!-- Dữ liệu sẽ được JS render ở đây -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+</div>
+
+<!-- QR Scanner Modal -->
+<div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qrScannerModalLabel">
+                        <i class="fas fa-qrcode me-2"></i>Check-in Vé
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <!-- Option chọn phương thức check-in -->
+                    <div class="mb-4 text-center">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary" id="option-camera">Check-in với Camera</button>
+                            <button type="button" class="btn btn-outline-secondary" id="option-manual">Check-in bằng mã QR code</button>
+                        </div>
+                    </div>
+                    <!-- QR Scanner Container (ẩn/hiện theo option) -->
+                    <div id="qr-scanner-container" class="text-center" style="display:none;">
+                    <div id="qr-reader" style="width: 100%; height: 400px;"></div>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-secondary" id="stop-scanner">
+                            <i class="fas fa-stop me-2"></i>Dừng quét
+                        </button>
+                    </div>
+                </div>
+                    <!-- Thủ công: nhập mã QR code (ẩn/hiện theo option) -->
+                    <div id="manual-checkin-container" style="display:none;">
+                        <label for="manual-qr-input" class="form-label">Nhập mã QR code thủ công:</label>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" id="manual-qr-input" placeholder="Nhập mã QR code...">
+                            <button class="btn btn-primary" id="manual-qr-submit" type="button">Xác nhận</button>
+                        </div>
+                    </div>
+                <!-- Loading State -->
+                <div id="scanning-loading" class="text-center" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Đang quét...</span>
+                    </div>
+                    <p class="mt-2">Đang khởi tạo camera...</p>
+                </div>
+                <!-- Scan Result -->
+                <div id="scan-result" style="display: none;">
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle me-2"></i>Thông tin vé đã quét:</h6>
+                        <div id="ticket-info">
+                            <!-- Ticket information will be populated here -->
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" id="scan-again">
+                            <i class="fas fa-redo me-2"></i>Quét lại
+                        </button>
+                            <button type="button" class="btn btn-primary" id="new-scan">
+                                <i class="fas fa-plus me-2"></i>Quét vé mới
+                        </button>
+                        <button type="button" class="btn btn-success" id="confirm-checkin">
+                            <i class="fas fa-check me-2"></i>Xác nhận Check-in
+                        </button>
+                    </div>
+                </div>
+                <!-- Error State -->
+                <div id="scan-error" class="alert alert-danger" style="display: none;">
+                    <h6><i class="fas fa-exclamation-triangle me-2"></i>Lỗi quét vé:</h6>
+                    <p id="error-message"></p>
+                    <button type="button" class="btn btn-warning" id="retry-scan">
+                        <i class="fas fa-redo me-2"></i>Thử lại
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success/Error Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="checkin-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            <strong class="me-auto">Check-in thành công</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toast-message">
+            <!-- Success/Error message will be shown here -->
+        </div>
+    </div>
+</div>
+
+    <!-- JS -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- HTML5 QR Code Scanner Library -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<!-- Staff Check-in JavaScript -->
+    <script src="{{ url_for('static', filename='js/staff.js') }}"></script>
+    
+    <!-- Logout Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle logout
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Confirm logout
+                if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                    // Clear localStorage
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('staffToken');
+                    
+                    // Show logout message
+                    alert('Đã đăng xuất thành công!');
+                    
+                    // Redirect to homepage
+                    window.location.href = '/';
+                }
+            });
+        }
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to switch tabs
+        window.switchTab = function(tabId) {
+            const tab = document.querySelector(`[href="#${tabId}"]`);
+            if (tab) {
+                const tabInstance = new bootstrap.Tab(tab);
+                tabInstance.show();
+            }
+        };
+        
+        // Calendar data - sự kiện mẫu cho nhân viên rạp phim
+        const calendarEvents = [
+            {
+                title: 'Ca sáng - Phòng 1',
+                start: new Date().setHours(8, 0, 0, 0),
+                end: new Date().setHours(12, 0, 0, 0),
+                color: '#ffe066',
+                extendedProps: { type: 'shift', hall: 'Phòng 1' }
+            },
+            {
+                title: 'Ca chiều - Phòng 2',
+                start: new Date().setHours(13, 0, 0, 0),
+                end: new Date().setHours(17, 0, 0, 0),
+                color: '#faa',
+                extendedProps: { type: 'shift', hall: 'Phòng 2' }
+            },
+            {
+                title: 'Họp nhân viên',
+                start: new Date().setHours(9, 0, 0, 0),
+                end: new Date().setHours(9, 30, 0, 0),
+                color: '#4CAF50',
+                extendedProps: { type: 'meeting' }
+            },
+            {
+                title: 'Kiểm tra thiết bị',
+                start: new Date().setHours(7, 30, 0, 0),
+                end: new Date().setHours(8, 0, 0, 0),
+                color: '#2196F3',
+                extendedProps: { type: 'maintenance' }
+            },
+            {
+                title: 'Ca tối - Phòng 1',
+                start: new Date().setHours(18, 0, 0, 0),
+                end: new Date().setHours(22, 0, 0, 0),
+                color: '#9C27B0',
+                extendedProps: { type: 'shift', hall: 'Phòng 1' }
+            }
+        ];
+
+        // Initialize calendar
+        const calendar = new FullCalendar.Calendar(document.getElementById('full-calendar'), {
+            initialView: 'timeGridWeek',
+            height: 600,
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'timeGridWeek,timeGridDay,listWeek'
+            },
+            events: calendarEvents,
+            eventClick: function(info) {
+                // Show detailed event info
+                const event = info.event;
+                const startTime = event.start.toLocaleTimeString('vi-VN', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                const endTime = event.end.toLocaleTimeString('vi-VN', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                alert(`Chi tiết sự kiện:\n\n` +
+                      `Tiêu đề: ${event.title}\n` +
+                      `Thời gian: ${startTime} - ${endTime}\n` +
+                      `Loại: ${event.extendedProps.type || 'Không xác định'}\n` +
+                      `Phòng: ${event.extendedProps.hall || 'N/A'}`);
+            },
+            eventDidMount: function(info) {
+                // Add tooltip
+                $(info.el).tooltip({
+                    title: info.event.title,
+                    placement: 'top',
+                    trigger: 'hover',
+                    container: 'body'
+                });
+            },
+            dayHeaderFormat: { weekday: 'long' },
+            slotLabelFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            }
+        });
+
+        // Handle tab changes to render calendar when calendar tab is shown
+        document.addEventListener('shown.bs.tab', function (event) {
+            if (event.target.getAttribute('href') === '#calendar') {
+                calendar.render();
+            }
+        });
+
+        // Check-in button functionality
+        document.getElementById('checkin-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Trigger the QR scanner modal
+            const qrModal = new bootstrap.Modal(document.getElementById('qrScannerModal'));
+            qrModal.show();
+        });
+
+        // Initialize Bootstrap tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+    </script>
+
+</body>
+</html> 

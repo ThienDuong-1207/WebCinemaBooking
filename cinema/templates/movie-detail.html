@@ -1,0 +1,30 @@
+{% extends "layout_customer.html" %}
+{% block title %}Movie Detail{% endblock %}
+{% block content %}
+  <div class="container my-5">
+    <div id="movie-detail">
+      <!-- Nội dung phim sẽ được JS tự động chèn vào đây -->
+    </div>
+    <div class="movie-showtimes mt-5">
+      <h2 class="section-title red">Lịch Chiếu</h2>
+      <div class="d-flex align-items-center mb-3">
+        <div id="showtime-dates" class="d-flex gap-3"></div>
+        <select class="form-select ms-auto" id="cinema-filter" style="width: 180px;">
+          <option value="all" selected>Tất cả Cinemas</option>
+          <option value="Cinema Hà Nội">Storia Hà Nội</option>
+          <option value="Cinema Sài Gòn">Storia Sài Gòn</option>
+        </select>
+      </div>
+      <div id="showtime-list"></div>
+    </div>
+  </div>
+  <script>
+    // Truyền movie_id từ Flask template sang JavaScript
+    const movieId = "{{ movie_id if movie_id else '' }}";
+    console.log('🎬 Movie ID from template:', movieId);
+  </script>
+{% endblock %}
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/movie-detail.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/login.js') }}?v=2"></script>
+{% endblock %}

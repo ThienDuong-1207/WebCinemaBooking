@@ -1,0 +1,511 @@
+{
+  "collection_name": "payments",
+  "export_timestamp": "2025-07-30T10:54:45.331664",
+  "total_documents": 63,
+  "data": [
+    {
+      "_id": "payment1",
+      "booking_id": "booking1",
+      "payment_method": "momo",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-12T07:18:33.959055"
+    },
+    {
+      "_id": "payment2",
+      "booking_id": "booking2",
+      "payment_method": "vnpay",
+      "status": "success",
+      "amount": 190000,
+      "time": "2025-07-12T07:18:33.959064"
+    },
+    {
+      "_id": "pay6875b9",
+      "booking_id": "bk6875b1",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 210000,
+      "time": "2025-07-15T02:16:30.106000"
+    },
+    {
+      "_id": "pay6876346489beb7c924a1e84c",
+      "booking_id": "bk687633a789beb7c924a1e84a",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 120000,
+      "time": "2025-07-15T10:58:44.397000"
+    },
+    {
+      "_id": "pay687635d589beb7c924a1e84f",
+      "booking_id": "bk687635bc89beb7c924a1e84d",
+      "payment_method": "shopeepay",
+      "status": "success",
+      "amount": 120000,
+      "time": "2025-07-15T11:04:53.333000"
+    },
+    {
+      "_id": "pay687637b2b007408b4f73c6a6",
+      "booking_id": "bk687637aeb007408b4f73c6a4",
+      "payment_method": "zalopay",
+      "status": "success",
+      "amount": 90000,
+      "time": "2025-07-15T11:12:50.735000"
+    },
+    {
+      "_id": "pay68763906b007408b4f73c6aa",
+      "booking_id": "bk68763903b007408b4f73c6a7",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-15T11:18:30.066000"
+    },
+    {
+      "_id": "pay68763a95b007408b4f73c6af",
+      "booking_id": "bk68763a93b007408b4f73c6ab",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 360000,
+      "time": "2025-07-15T11:25:09.574000"
+    },
+    {
+      "_id": "pay68763a9ab007408b4f73c6b0",
+      "booking_id": "bk68763a93b007408b4f73c6ab",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 360000,
+      "time": "2025-07-15T11:25:14.525000"
+    },
+    {
+      "_id": "pay68763ac8b007408b4f73c6b1",
+      "booking_id": "bk68763a93b007408b4f73c6ab",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 360000,
+      "time": "2025-07-15T11:26:00.185000"
+    },
+    {
+      "_id": "pay68763d186aa670e407a73093",
+      "booking_id": "bk68763d146aa670e407a73090",
+      "payment_method": "shopeepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-15T11:35:52.065000"
+    },
+    {
+      "_id": "pay68763d5b6aa670e407a73094",
+      "booking_id": "bk68763a93b007408b4f73c6ab",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 360000,
+      "time": "2025-07-15T11:36:59.053000"
+    },
+    {
+      "_id": "pay68763ddf6aa670e407a73095",
+      "booking_id": "bk68763a93b007408b4f73c6ab",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 360000,
+      "time": "2025-07-15T11:39:11.092000"
+    },
+    {
+      "_id": "pay68763ef16aa670e407a73099",
+      "booking_id": "bk68763eef6aa670e407a73096",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-15T11:43:45.841000"
+    },
+    {
+      "_id": "pay68763f5063b7615f59fcbd89",
+      "booking_id": "bk68763f4e63b7615f59fcbd86",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-15T11:45:20.234000"
+    },
+    {
+      "_id": "pay68763f6d1af7b1c67d57901a",
+      "booking_id": "bk68763f6c1af7b1c67d579016",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 300000,
+      "time": "2025-07-15T11:45:49.740000"
+    },
+    {
+      "_id": "pay6876483fbc6a7b3c2dadf46d",
+      "booking_id": "bk6876483dbc6a7b3c2dadf469",
+      "payment_method": "zalopay",
+      "status": "success",
+      "amount": 270000,
+      "time": "2025-07-15T12:23:27.517000"
+    },
+    {
+      "_id": "pay68764858bc6a7b3c2dadf472",
+      "booking_id": "bk68764856bc6a7b3c2dadf46e",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 270000,
+      "time": "2025-07-15T12:23:52.130000"
+    },
+    {
+      "_id": "pay6876486cbc6a7b3c2dadf476",
+      "booking_id": "bk6876486bbc6a7b3c2dadf473",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-15T12:24:12.833000"
+    },
+    {
+      "_id": "pay6876495f509cbd1794f09dd3",
+      "booking_id": "bk68764958509cbd1794f09dcf",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 270000,
+      "time": "2025-07-15T12:28:15.866000"
+    },
+    {
+      "_id": "pay68764a0248e2fe54a4132767",
+      "booking_id": "bk68764a0048e2fe54a4132762",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 360000,
+      "time": "2025-07-15T12:30:58.015000"
+    },
+    {
+      "_id": "pay68764a9948e2fe54a413276b",
+      "booking_id": "bk68764a9848e2fe54a4132768",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-15T12:33:29.708000"
+    },
+    {
+      "_id": "pay68764aa748e2fe54a413276f",
+      "booking_id": "bk68764aa648e2fe54a413276c",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-15T12:33:43.670000"
+    },
+    {
+      "_id": "pay68764b31184aa6d9529bae55",
+      "booking_id": "bk68764b2f184aa6d9529bae52",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-15T12:36:01.322000"
+    },
+    {
+      "_id": "pay68764e26184aa6d9529bae59",
+      "booking_id": "bk68764e25184aa6d9529bae56",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-15T12:48:38.934000"
+    },
+    {
+      "_id": "pay68764f5ceb8d5b9d81c9959a",
+      "booking_id": "bk68764f5beb8d5b9d81c99598",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 120000,
+      "time": "2025-07-15T12:53:48.615000"
+    },
+    {
+      "_id": "pay687652d77deaaa8ebd7848e8",
+      "booking_id": "bk687652d57deaaa8ebd7848e5",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-15T13:08:39.536000"
+    },
+    {
+      "_id": "pay687653b5f8faf0adcd3f019a",
+      "booking_id": "bk687653b4f8faf0adcd3f0197",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-15T13:12:21.651000"
+    },
+    {
+      "_id": "pay6876559d0e7e254f305066ae",
+      "booking_id": "bk6876559b0e7e254f305066ab",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-15T13:20:29.613000"
+    },
+    {
+      "_id": "pay68765a013384c32b4288b90c",
+      "booking_id": "bk68765a003384c32b4288b909",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-15T13:39:13.891000"
+    },
+    {
+      "_id": "pay687765e52b6de6c11f582df7",
+      "booking_id": "bk687765e22b6de6c11f582df4",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-16T08:42:13.126000"
+    },
+    {
+      "_id": "pay687766d238f744b54135d5c2",
+      "booking_id": "bk687766d038f744b54135d5bf",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-16T08:46:10.374000"
+    },
+    {
+      "_id": "pay6877684b38f744b54135d5c9",
+      "booking_id": "bk6877683e38f744b54135d5c6",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-16T08:52:27.833000"
+    },
+    {
+      "_id": "pay68779504e448c62d3fb60a18",
+      "booking_id": "bk687794ede448c62d3fb60a15",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-16T12:03:16.520000"
+    },
+    {
+      "_id": "pay68779534e448c62d3fb60a1c",
+      "booking_id": "bk68779532e448c62d3fb60a19",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-16T12:04:04.365000"
+    },
+    {
+      "_id": "pay6877c820e4396d3cb043a3b2",
+      "booking_id": "bk6877c801e4396d3cb043a3b0",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 120000,
+      "time": "2025-07-16T15:41:20.294000"
+    },
+    {
+      "_id": "pay687842494609340d88e97144",
+      "booking_id": "bk687842484609340d88e97141",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-17T00:22:33.834000"
+    },
+    {
+      "_id": "pay687842a24609340d88e97148",
+      "booking_id": "bk6878429f4609340d88e97145",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-17T00:24:02.751000"
+    },
+    {
+      "_id": "pay6878471b2bec96f509340be9",
+      "booking_id": "bk687846f82bec96f509340be6",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-17T00:43:07.734000"
+    },
+    {
+      "_id": "pay6879b7b39bd77963eb6dd62a",
+      "booking_id": "bk6879b7b19bd77963eb6dd627",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-18T02:55:47.112000"
+    },
+    {
+      "_id": "pay687b91a738e885846992b0ef",
+      "booking_id": "bk687b919e38e885846992b0ec",
+      "payment_method": "momo",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-19T12:37:59.763000"
+    },
+    {
+      "_id": "pay687b92568f24a7d79dd34c96",
+      "booking_id": "bk687b92498f24a7d79dd34c93",
+      "payment_method": "momo",
+      "status": "success",
+      "amount": 180000,
+      "time": "2025-07-19T12:40:54.267000"
+    },
+    {
+      "_id": "pay687d8d94ebc9c200c2425e51",
+      "booking_id": "bk687d8d8debc9c200c2425e4e",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-21T00:45:08.271000"
+    },
+    {
+      "_id": "pay687d8db5ebc9c200c2425e54",
+      "booking_id": "bk687d8db1ebc9c200c2425e52",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 90000,
+      "time": "2025-07-21T00:45:41.038000"
+    },
+    {
+      "_id": "pay687f10453cf5c68937f009e3",
+      "booking_id": "bk687f10443cf5c68937f009de",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 480000,
+      "time": "2025-07-22T04:15:01.584000"
+    },
+    {
+      "_id": "pay687f10603cf5c68937f009e9",
+      "booking_id": "bk687f105e3cf5c68937f009e4",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 360000,
+      "time": "2025-07-22T04:15:28.226000"
+    },
+    {
+      "_id": "pay687f10723cf5c68937f009f0",
+      "booking_id": "bk687f10703cf5c68937f009ea",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 600000,
+      "time": "2025-07-22T04:15:46.049000"
+    },
+    {
+      "_id": "pay687f10803cf5c68937f009f6",
+      "booking_id": "bk687f107f3cf5c68937f009f1",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 480000,
+      "time": "2025-07-22T04:16:00.702000"
+    },
+    {
+      "_id": "pay687f10913cf5c68937f009fc",
+      "booking_id": "bk687f10903cf5c68937f009f7",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 360000,
+      "time": "2025-07-22T04:16:17.891000"
+    },
+    {
+      "_id": "pay687f10a23cf5c68937f00a03",
+      "booking_id": "bk687f10a03cf5c68937f009fd",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 600000,
+      "time": "2025-07-22T04:16:34.160000"
+    },
+    {
+      "_id": "pay687f10b23cf5c68937f00a09",
+      "booking_id": "bk687f10b13cf5c68937f00a04",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 360000,
+      "time": "2025-07-22T04:16:50.296000"
+    },
+    {
+      "_id": "pay687f10be3cf5c68937f00a0f",
+      "booking_id": "bk687f10bd3cf5c68937f00a0a",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 450000,
+      "time": "2025-07-22T04:17:02.734000"
+    },
+    {
+      "_id": "pay687f10d53cf5c68937f00a1b",
+      "booking_id": "bk687f10d23cf5c68937f00a10",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 900000,
+      "time": "2025-07-22T04:17:25.691000"
+    },
+    {
+      "_id": "pay687f10e73cf5c68937f00a27",
+      "booking_id": "bk687f10e63cf5c68937f00a1c",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 900000,
+      "time": "2025-07-22T04:17:43.448000"
+    },
+    {
+      "_id": "pay687fa75660708e7b6dd6dd88",
+      "booking_id": "bk687fa75460708e7b6dd6dd85",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-22T14:59:34.996000"
+    },
+    {
+      "_id": "pay68888acd8297d0fea338672c",
+      "booking_id": "bk68888acb8297d0fea3386729",
+      "payment_method": "zalopay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-29T08:48:13.949000"
+    },
+    {
+      "_id": "pay6888d0e0ee5fac3d4c61a691",
+      "booking_id": "bk6888d0e0ee5fac3d4c61a690",
+      "payment_method": "shopeepay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-29T13:47:12.307000"
+    },
+    {
+      "_id": "pay6888d107ee5fac3d4c61a697",
+      "booking_id": "bk6888d107ee5fac3d4c61a696",
+      "payment_method": "zalopay",
+      "status": "success",
+      "amount": 240000,
+      "time": "2025-07-29T13:47:51.232000"
+    },
+    {
+      "_id": "pay6888d125ee5fac3d4c61a69d",
+      "booking_id": "bk6888d125ee5fac3d4c61a69c",
+      "payment_method": "onepay",
+      "status": "success",
+      "amount": 1200000,
+      "time": "2025-07-29T13:48:21.560000"
+    },
+    {
+      "_id": "pay68892a604e55324d0e1a88f8",
+      "booking_id": "bk68892a604e55324d0e1a88f7",
+      "payment_method": "shopeepay",
+      "status": "success",
+      "amount": 360000,
+      "time": "2025-07-29T20:09:04.444000"
+    },
+    {
+      "_id": "pay68892a8b4e55324d0e1a8901",
+      "booking_id": "bk68892a8b4e55324d0e1a8900",
+      "payment_method": "momo",
+      "status": "success",
+      "amount": 840000,
+      "time": "2025-07-29T20:09:47.930000"
+    },
+    {
+      "_id": "68892c14a0f04ebcc092657e",
+      "booking_id": "testbooking123",
+      "amount": 180000,
+      "status": "success",
+      "payment_method": "vnpay",
+      "created_at": "2025-07-30T10:35:00Z"
+    },
+    {
+      "_id": "pay688990a02147c4510bce5aa4",
+      "booking_id": "bk688990a02147c4510bce5aa3",
+      "payment_method": "shopeepay",
+      "status": "success",
+      "amount": 540000,
+      "time": "2025-07-30T03:25:20.479000"
+    }
+  ]
+}

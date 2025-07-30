@@ -1,0 +1,508 @@
+/* ===== TICKET PROGRESSIVE LAYOUT ===== */
+
+/* Base Container */
+.tickets-container-progressive {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ===== MOBILE LAYOUT (Default) ===== */
+.ticket-card-progressive {
+    width: 100%;
+    max-width: 400px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.ticket-mobile {
+    display: block;
+}
+
+.ticket-tablet,
+.ticket-desktop {
+    display: none;
+}
+
+/* Mobile Poster Section */
+.ticket-poster-section {
+    padding: 1.5rem;
+    text-align: center;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.ticket-poster {
+    width: 120px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.ticket-poster:hover {
+    transform: scale(1.05);
+}
+
+.ticket-movie-title {
+    margin: 1rem 0 0 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    text-align: center;
+}
+
+/* Mobile Info Section */
+.ticket-info-section {
+    padding: 1.5rem;
+    background: #ffffff;
+}
+
+.ticket-seat-info,
+.ticket-show-info,
+.ticket-hall-info,
+.ticket-cinema-name {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    color: #374151;
+}
+
+.ticket-seat-info {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #1f2937;
+}
+
+.ticket-cinema-name {
+    color: #d32f2f;
+    font-weight: 600;
+}
+
+.ticket-seat-info i,
+.ticket-show-info i,
+.ticket-hall-info i,
+.ticket-cinema-name i {
+    margin-right: 0.5rem;
+    width: 16px;
+    color: #6b7280;
+}
+
+.ticket-show-info {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.ticket-date,
+.ticket-time {
+    display: flex;
+    align-items: center;
+}
+
+/* Mobile Barcode */
+.ticket-barcode-mobile {
+    margin: 1rem 0;
+    text-align: center;
+    padding: 1rem;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.barcode-lines {
+    font-size: 1.25rem;
+    letter-spacing: 2px;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.barcode-text {
+    font-size: 0.875rem;
+    letter-spacing: 1px;
+    color: #6b7280;
+    font-family: 'Courier New', monospace;
+}
+
+/* Mobile Actions */
+.ticket-actions-mobile {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.ticket-actions-mobile button {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-show-barcode {
+    background: #d32f2f;
+    color: white;
+}
+
+.btn-show-barcode:hover {
+    background: #b71c1c;
+    transform: translateY(-1px);
+}
+
+.btn-download-ticket {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-download-ticket:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+.btn-share-ticket {
+    background: #10b981;
+    color: white;
+}
+
+.btn-share-ticket:hover {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+/* ===== TABLET LAYOUT ===== */
+@media (min-width: 768px) {
+    .ticket-mobile {
+        display: none;
+    }
+    
+    .ticket-tablet {
+        display: flex;
+        align-items: stretch;
+        min-height: 200px;
+    }
+    
+    .ticket-card-progressive {
+        max-width: 600px;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        /* Glassmorphism Light */
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .ticket-poster-section {
+        flex: 0 0 180px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, rgba(248, 250, 252, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%);
+    }
+    
+    .ticket-poster {
+        width: 140px;
+        height: 180px;
+    }
+    
+    .ticket-info-section {
+        flex: 1;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .ticket-barcode-section {
+        flex: 0 0 160px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #f9fafb;
+        border-left: 1px solid #e5e7eb;
+    }
+    
+    .ticket-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+    
+    .ticket-actions button {
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+    
+    .ticket-actions .btn-show-barcode {
+        background: #d32f2f;
+        color: white;
+    }
+    
+    .ticket-actions .btn-download-ticket {
+        background: #3b82f6;
+        color: white;
+    }
+    
+    .ticket-actions .btn-share-ticket {
+        background: #10b981;
+        color: white;
+    }
+    
+    .ticket-actions button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* ===== DESKTOP LAYOUT ===== */
+@media (min-width: 1024px) {
+    .ticket-tablet {
+        display: none;
+    }
+    
+    .ticket-desktop {
+        display: flex;
+        align-items: stretch;
+        min-height: 240px;
+        position: relative;
+    }
+    
+    .ticket-card-progressive {
+        max-width: 800px;
+        border-radius: 24px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        /* Full Glassmorphism */
+        backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        /* Perforated effect */
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Perforated line effect */
+    .ticket-desktop::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: repeating-linear-gradient(
+            to right,
+            transparent 0,
+            transparent 8px,
+            #e5e7eb 8px,
+            #e5e7eb 12px
+        );
+        z-index: 1;
+    }
+    
+    .ticket-poster-section {
+        flex: 0 0 200px;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(241, 245, 249, 0.95) 100%);
+        position: relative;
+        z-index: 2;
+    }
+    
+    .ticket-poster {
+        width: 160px;
+        height: 200px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .ticket-info-section {
+        flex: 1;
+        padding: 2rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .ticket-seat-info {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    
+    .ticket-show-info {
+        margin-bottom: 1rem;
+    }
+    
+    .ticket-hall-info,
+    .ticket-cinema-name {
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+    }
+    
+    .ticket-barcode-section {
+        flex: 0 0 200px;
+        padding: 2rem;
+        background: rgba(249, 250, 251, 0.9);
+        border-left: 1px solid rgba(229, 231, 235, 0.5);
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .barcode-display {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .barcode-lines {
+        font-size: 1.5rem;
+        letter-spacing: 3px;
+        margin-bottom: 0.75rem;
+    }
+    
+    .barcode-text {
+        font-size: 1rem;
+        letter-spacing: 2px;
+    }
+    
+    .ticket-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+    
+    .ticket-actions button {
+        width: 48px;
+        height: 48px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .ticket-actions button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* ===== HOVER EFFECTS ===== */
+.ticket-card-progressive:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2);
+}
+
+.ticket-card-progressive:hover .ticket-poster {
+    transform: scale(1.08);
+}
+
+.ticket-card-progressive:hover .barcode-lines {
+    color: #d32f2f;
+    transition: color 0.3s ease;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes ticketAppear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ticket-card-progressive {
+    animation: ticketAppear 0.6s ease-out;
+}
+
+/* ===== RESPONSIVE FALLBACKS ===== */
+@media (max-width: 480px) {
+    .ticket-actions-mobile {
+        flex-direction: column;
+    }
+    
+    .ticket-actions-mobile button {
+        width: 100%;
+    }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+    .ticket-card-progressive,
+    .ticket-poster,
+    .ticket-actions button {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    .ticket-card-progressive {
+        background: rgba(31, 41, 55, 0.9);
+        border-color: rgba(75, 85, 99, 0.3);
+    }
+    
+    .ticket-poster-section {
+        background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(55, 65, 81, 0.9) 100%);
+    }
+    
+    .ticket-info-section {
+        background: rgba(31, 41, 55, 0.9);
+    }
+    
+    .ticket-barcode-section {
+        background: rgba(55, 65, 81, 0.9);
+    }
+    
+    .ticket-movie-title,
+    .ticket-seat-info,
+    .ticket-show-info,
+    .ticket-hall-info {
+        color: #f9fafb;
+    }
+    
+    .ticket-cinema-name {
+        color: #f87171;
+    }
+    
+    .barcode-lines {
+        color: #f9fafb;
+    }
+    
+    .barcode-text {
+        color: #d1d5db;
+    }
+} 

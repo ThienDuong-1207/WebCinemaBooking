@@ -1,0 +1,67 @@
+{
+  "collection_name": "brokenSeats",
+  "export_timestamp": "2025-07-30T10:54:45.332781",
+  "total_documents": 5,
+  "data": [
+    {
+      "_id": "6888ad0bf40ac1d426a337d7",
+      "seat_id": "A1",
+      "hall": "Hall 1",
+      "cinema": "Storia Sài Gòn",
+      "report_time": "2025-07-27T18:14:19.051000",
+      "description": "Ghế bị gãy chân",
+      "reported_by": "staff",
+      "status": "active",
+      "resolved_time": null,
+      "resolved_by": null
+    },
+    {
+      "_id": "6888ad0bf40ac1d426a337d8",
+      "seat_id": "B5",
+      "hall": "Hall 2",
+      "cinema": "Storia Hà Nội",
+      "report_time": "2025-07-28T18:14:19.051000",
+      "description": "Ghế bị rách da",
+      "reported_by": "staff",
+      "status": "active",
+      "resolved_time": null,
+      "resolved_by": null
+    },
+    {
+      "_id": "6888ad0bf40ac1d426a337d9",
+      "seat_id": "C3",
+      "hall": "Hall 1",
+      "cinema": "Storia Sài Gòn",
+      "report_time": "2025-07-24T18:14:19.051000",
+      "description": "Ghế bị lỏng ốc",
+      "reported_by": "staff",
+      "status": "resolved",
+      "resolved_time": "2025-07-28T18:14:19.051000",
+      "resolved_by": "staff"
+    },
+    {
+      "_id": "6888ae6fe92964cba6ca1077",
+      "seat_id": "A1",
+      "hall": "Hall 1",
+      "cinema": "Storia Hà Nội",
+      "report_time": "2025-07-29T18:19",
+      "description": "1",
+      "reported_by": "staff",
+      "status": "active",
+      "resolved_time": null,
+      "resolved_by": null
+    },
+    {
+      "_id": "6888af67bb3fd1fee3b94016",
+      "seat_id": "TEST1",
+      "hall": "Hall 1",
+      "cinema": "Storia Sài Gòn",
+      "report_time": "2025-07-29T18:24:23.427363",
+      "description": "Ghế test tự động",
+      "reported_by": "test_script",
+      "status": "active",
+      "resolved_time": null,
+      "resolved_by": null
+    }
+  ]
+}

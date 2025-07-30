@@ -1,0 +1,103 @@
+<!-- templates/genres.html -->
+{% extends "layout_customer.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <!--Thay đổi code-->
+  <h3 class="mb-4" style="border-left: 4px solid #8B0000; padding-left: 10px; font-weight: 700; color: #8B0000;">PHIM ĐIỆN ẢNH</h3>
+  <div class="row mb-3">
+    <div class="col-md-2"><select id="genre-select" class="form-select"><option value="">Thể Loại</option></select></div>
+    <div class="col-md-2"><select id="country-select" class="form-select"><option value="">Quốc Gia</option></select></div>
+    <div class="col-md-2"><select id="year-select" class="form-select"><option value="">Năm</option></select></div>
+    <div class="col-md-2"><select id="status-select" class="form-select"><option value="">Đang Chiếu/Sắp</option></select></div>
+    <div class="col-md-2"><select id="sort-select" class="form-select"><option value="">Xem Nhiều Nhất</option></select></div>
+  </div>
+  <!-- <div style="height:3px; background:#1976d2; border-radius:2px; margin-bottom:18px; margin-top:8px;"></div> -->
+  <div class="row">
+    <!-- Cột trái: Danh sách review phim -->
+    <div class="col-md-8">
+      <div id="movie-list" class="d-flex flex-column gap-3">
+        <!-- JS sẽ render danh sách phim ở đây -->
+      </div>
+    </div>
+    <!-- Cột phải: Mua Vé Nhanh + Phim Đang Chiếu (giữ nguyên) -->
+    <div class="col-md-4">
+      <!-- Mua vé nhanh -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-danger text-white text-center fw-bold" style="background: linear-gradient(90deg, #8B0000 0%, #b71c1c 100%) !important;">Mua Vé Nhanh</div>
+        <div class="card-body">
+          <form>
+            <div class="mb-2">
+              <select class="form-select" id="quick-movie"><option>Chọn phim</option></select>
+            </div>
+            <div class="mb-2">
+              <select class="form-select" id="quick-cinema"><option>Chọn rạp</option></select>
+            </div>
+            <div class="mb-2">
+              <select class="form-select" id="quick-date"><option>Chọn ngày</option></select>
+            </div>
+            <button type="submit" class="btn btn-darkred w-100">Mua Vé</button>
+          </form>
+        </div>
+      </div>
+      <!-- Phim đang chiếu nổi bật -->
+      <div>
+        <h5 class="mb-3 section-title red">PHIM ĐANG CHIẾU</h5>
+        <div class="card movie-card mb-3">
+          <img src="/static/img/showing_movie1.jpg" class="card-img-top" alt="Phim đang chiếu">
+          <div class="card-body">
+            <h6 class="card-title" style="color:#8B0000; font-weight:700;">Mùa Hè Kinh Hãi</h6>
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge bg-warning text-dark me-2">T18</span>
+              <span class="me-2"><i class="fa fa-star text-warning"></i> 7</span>
+              <span class="text-muted">18.07.2025</span>
+            </div>
+            <p class="card-text">Một bộ phim kinh dị hấp dẫn, ra mắt mùa hè 2025.</p>
+          </div>
+        </div>
+        <div class="card movie-card mb-3">
+          <img src="/static/img/showing_movie2.jpg" class="card-img-top" alt="Phim đang chiếu">
+          <div class="card-body">
+            <h6 class="card-title" style="color:#8B0000; font-weight:700;">Conan: Dư Âm Của Độc Nhãn</h6>
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge bg-warning text-dark me-2">K</span>
+              <span class="me-2"><i class="fa fa-star text-warning"></i> 9.8</span>
+              <span class="text-muted">25.07.2025</span>
+            </div>
+            <p class="card-text">Phim hoạt hình trinh thám hấp dẫn, dành cho mọi lứa tuổi.</p>
+          </div>
+        </div>
+        <div class="card movie-card mb-3">
+          <img src="/static/img/showing_movie3.jpg" class="card-img-top" alt="Phim đang chiếu">
+          <div class="card-body">
+            <h6 class="card-title" style="color:#8B0000; font-weight:700;">Superman</h6>
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge bg-warning text-dark me-2">T13</span>
+              <span class="me-2"><i class="fa fa-star text-warning"></i> 9.6</span>
+              <span class="text-muted">11.07.2025</span>
+            </div>
+            <p class="card-text">Siêu phẩm siêu anh hùng trở lại với diện mạo mới.</p>
+          </div>
+        </div>
+        <div class="card movie-card mb-3">
+          <img src="/static/img/showing_movie4.jpg" class="card-img-top" alt="Phim đang chiếu">
+          <div class="card-body">
+            <h6 class="card-title" style="color:#8B0000; font-weight:700;">Ma Không Đầu</h6>
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge bg-warning text-dark me-2">T16</span>
+              <span class="me-2"><i class="fa fa-star text-warning"></i> 8.5</span>
+              <span class="text-muted">20.07.2025</span>
+            </div>
+            <p class="card-text">Phim kinh dị hài hước với những tình tiết bất ngờ.</p>
+          </div>
+        </div>
+        <div class="text-center mt-2">
+          <a href="#" class="btn btn-outline-darkred">Xem thêm <i class="fa fa-angle-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="{{ url_for('static', filename='js/genres.js') }}"></script>
+{% endblock %}

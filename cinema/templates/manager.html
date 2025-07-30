@@ -1,0 +1,395 @@
+{% extends "layout_employees.html" %}
+
+{% block title %}Trang quản lý - Storia{% endblock %}
+
+{% block sidebar_menu %}
+<nav class="nav flex-column">
+    <a class="nav-link active" href="#dashboard" data-bs-toggle="tab"><i class="fas fa-home me-2"></i>Dashboard</a>
+    <a class="nav-link" href="#movie-management" data-bs-toggle="tab"><i class="fas fa-film me-2"></i>Quản lý phim</a>
+    <a class="nav-link" href="#showtime-management" data-bs-toggle="tab"><i class="fas fa-calendar-alt me-2"></i>Quản lý suất chiếu</a>
+    <a class="nav-link" href="#revenue-report" data-bs-toggle="tab"><i class="fas fa-chart-line me-2"></i>Báo cáo doanh thu</a>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="tab-content">
+    <!-- Dashboard Tab -->
+    <div class="tab-pane fade show active" id="dashboard">
+        <h2 class="mb-4">Chào mừng quản lý!</h2>
+        <div class="row mb-4" id="dashboard-widgets-row">
+            <div class="col-md-3 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Tổng số phim</h5>
+                        <p class="display-6 mb-0" id="widget-total-movies">...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Suất chiếu hôm nay</h5>
+                        <p class="display-6 mb-0" id="widget-showtimes-today">...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Doanh thu hôm nay</h5>
+                        <p class="display-6 mb-0 text-success" id="widget-revenue-today">...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Vé đã bán</h5>
+                        <p class="display-6 mb-0" id="widget-tickets-sold">...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-8 mb-3">
+                <div class="card h-100">
+                    <div class="card-header"><h5 class="mb-0">Doanh thu tháng này</h5></div>
+                    <div class="card-body">
+                        <canvas id="dashboard-revenue-chart" height="120"></canvas>
+                        <div class="text-end mt-2">
+                            <span class="fw-bold">Tổng doanh thu tháng: </span>
+                            <span id="widget-revenue-month" class="text-success">...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-header"><h5 class="mb-0">Phim sắp chiếu</h5></div>
+                    <ul class="list-group list-group-flush" id="dashboard-comingsoon-list">
+                        <li class="list-group-item text-center text-muted">Đang tải...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p>Đây là giao diện dành cho quản lý rạp phim Storia.</p>
+    </div>
+
+    <!-- Movie Management Tab -->
+    <div class="tab-pane fade" id="movie-management">
+        <h2 class="mb-4">Quản lý phim</h2>
+        
+        <!-- Add Movie Form -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Thêm phim mới</h5>
+            </div>
+            <div class="card-body">
+                <form id="addMovieForm" method="POST" action="/manager/add-movie">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="movie_id" class="form-label">ID Phim <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="movie_id" name="movie_id" required 
+                                       placeholder="Ví dụ: movie1, httyd, elio...">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Tên phim <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="title" name="title" required 
+                                       placeholder="How to Train Your Dragon">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="duration" class="form-label">Thời lượng (phút) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="duration" name="duration" required 
+                                       min="1" placeholder="110">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="release_date" class="form-label">Ngày khởi chiếu <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="release_date" name="release_date" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Trạng thái <span class="text-danger">*</span></label>
+                                <select class="form-select" id="status" name="status" required>
+                                    <option value="">Chọn trạng thái</option>
+                                    <option value="Active">Đang chiếu</option>
+                                    <option value="Coming Soon">Sắp chiếu</option>
+                                    <option value="Inactive">Ngừng chiếu</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="genres" class="form-label">Thể loại <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="genres" name="genres" required 
+                                       placeholder="Animation, Adventure (phân cách bằng dấu phẩy)">
+                                <div class="form-text">Nhập các thể loại, phân cách bằng dấu phẩy</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="thumbnail_url" class="form-label">URL Thumbnail</label>
+                                <input type="url" class="form-control" id="thumbnail_url" name="thumbnail_url" 
+                                       placeholder="https://example.com/movie-thumbnail.jpg">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="poster" class="form-label">Đường dẫn Poster <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="poster" name="poster" required 
+                                       placeholder="/static/img/showing_movie1.jpg">
+                                <div class="form-text">Đường dẫn tới file poster trong thư mục static</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Mô tả phim <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="description" name="description" rows="4" required 
+                                          placeholder="Mô tả nội dung phim..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="reset" class="btn btn-secondary">Xóa form</button>
+                        <button type="submit" class="btn btn-primary">Thêm phim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Movie List -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Danh sách phim</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên phim</th>
+                                <th>Thể loại</th>
+                                <th>Thời lượng</th>
+                                <th>Ngày khởi chiếu</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="movieTableBody">
+                            <!-- Movies will be loaded here via JavaScript -->
+                            <tr>
+                                <td colspan="7" class="text-center">Đang tải dữ liệu...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Showtime Management Tab -->
+    <div class="tab-pane fade" id="showtime-management">
+        <h2 class="mb-4">Quản lý suất chiếu</h2>
+        
+        <!-- Add Showtime Form (chuẩn hóa trường dữ liệu, chỉ còn movie_id, cinema, hall, date, time, base_price) -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Tạo suất chiếu mới</h5>
+            </div>
+            <div class="card-body">
+                <form id="addShowtimeForm" method="POST">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="showtime_movie_id" class="form-label">Chọn phim <span class="text-danger">*</span></label>
+                                <select class="form-select" id="showtime_movie_id" name="movie_id" required>
+                                    <option value="">Chọn phim...</option>
+                                    <!-- JS sẽ load danh sách phim -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="cinema" class="form-label">Chọn rạp <span class="text-danger">*</span></label>
+                                <select class="form-select" id="cinema" name="cinema" required>
+                                    <option value="">Chọn rạp...</option>
+                                    <option value="Storia Hà Nội">Storia Hà Nội</option>
+                                    <option value="Storia Sài Gòn">Storia Sài Gòn</option>
+                                </select>
+                                    </div>
+                                </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="hall" class="form-label">Chọn phòng <span class="text-danger">*</span></label>
+                                <select class="form-select" id="hall" name="hall" required>
+                                    <option value="">Chọn phòng...</option>
+                                    <option value="Hall 1">Hall 1</option>
+                                    <option value="Hall 2">Hall 2</option>
+                                    <option value="Hall 3">Hall 3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Ngày chiếu <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="date" name="date" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="time" class="form-label">Giờ chiếu <span class="text-danger">*</span></label>
+                                <input type="time" class="form-control" id="time" name="time" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="base_price" class="form-label">Giá vé cơ bản (VNĐ) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="base_price" name="base_price" required min="50000" step="1000" value="90000">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="reset" class="btn btn-secondary">Xóa form</button>
+                        <button type="submit" class="btn btn-success">Tạo suất chiếu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Showtime List -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Danh sách suất chiếu</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Phim</th>
+                                <th>Rạp</th>
+                                <th>Phòng</th>
+                                <th>Ngày chiếu</th>
+                                <th>Giờ chiếu</th>
+                                <th>Giá vé</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="showtimeTableBody">
+                            <!-- Showtimes will be loaded here via JavaScript -->
+                            <tr>
+                                <td colspan="8" class="text-center">Đang tải dữ liệu...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Report Tab -->
+    <div class="tab-pane fade" id="revenue-report">
+        <h2 class="mb-4">BÁO CÁO DOANH THU</h2>
+        <div class="mb-3">
+            <p class="text-muted">Xem thống kê doanh thu. Chọn kiểu hiển thị để lọc dữ liệu.</p>
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <select id="salesChartType" class="form-select">
+                  <option value="byDay">Doanh thu theo ngày</option>
+                  <option value="byMovie">Doanh thu theo phim</option>
+                  <option value="byShowtime">Doanh thu theo suất chiếu</option>
+                  <option value="byHall">Doanh thu theo rạp</option>
+                </select>
+              </div>
+            </div>
+        </div>
+        <div class="row mb-3" id="cinema-filter-row" style="display:none;">
+          <div class="col-md-4">
+            <select id="cinemaFilter" class="form-select">
+              <option value="All">Tất cả rạp</option>
+              <option value="Storia Hà Nội">Hà Nội</option>
+              <option value="Storia Sài Gòn">Sài Gòn</option>
+            </select>
+          </div>
+        </div>
+        <canvas id="salesChart"></canvas>
+    </div>
+
+    <!-- Staff Management Tab (XÓA PHẦN NÀY) -->
+    <!-- <div class="tab-pane fade" id="staff-management">
+        <h2 class="mb-4">Quản lý nhân viên</h2>
+        <p>Tính năng quản lý nhân viên sẽ được phát triển sau.</p>
+    </div> -->
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/manager.js') }}"></script>
+
+<!-- Fix logout button for manager -->
+<style>
+/* Force logout button to be visible */
+.sidebar-logout {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1001 !important;
+}
+
+.sidebar-logout .btn {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Ensure sidebar has proper flex layout */
+.sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+}
+
+.sidebar-menu {
+    flex: 1 !important;
+    min-height: 0 !important;
+}
+
+.sidebar-logout {
+    flex-shrink: 0 !important;
+    margin-top: auto !important;
+}
+</style>
+
+<script>
+// Only add CSS fix for manager, use layout's handleLogout
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔍 Setting up logout button CSS fix in manager.html...');
+    
+    // Wait a bit for layout to load
+    setTimeout(function() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            console.log('✅ Logout button found in manager');
+            
+            // Force button to be visible with CSS
+            logoutBtn.style.display = 'block';
+            logoutBtn.style.visibility = 'visible';
+            logoutBtn.style.opacity = '1';
+            logoutBtn.style.pointerEvents = 'auto';
+            
+            console.log('✅ Logout button CSS fix complete for manager');
+            } else {
+            console.log('❌ Logout button not found in manager');
+        }
+    }, 1000); // Wait 1 second
+});
+</script>
+{% endblock %} 

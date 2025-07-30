@@ -1,0 +1,819 @@
+{% extends "layout_employees.html" %}
+
+{% block title %}Trang admin - Storia{% endblock %}
+
+{% block sidebar_menu %}
+<nav class="nav flex-column">
+    <a class="nav-link active" href="#dashboard" data-bs-toggle="tab"><i class="fas fa-home me-2"></i>Dashboard</a>
+    <a class="nav-link" href="#user-management" data-bs-toggle="tab"><i class="fas fa-users me-2"></i>Quản lý user</a>
+    <a class="nav-link" href="#system-logs" data-bs-toggle="tab"><i class="fas fa-clipboard-list me-2"></i>Logs hệ thống</a>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="tab-content">
+    <!-- Dashboard Tab -->
+    <div class="tab-pane fade show active" id="dashboard">
+        <h2 class="mb-4">Dashboard Hệ Thống</h2>
+        
+        <!-- System Overview Cards -->
+        <div class="dashboard-cards-row">
+            <div class="dashboard-card dashboard-card-blue">
+                <div class="dashboard-card-icon"><span class="icon-bg icon-bg-blue"><i class="fas fa-users"></i></span></div>
+                <div class="dashboard-card-label">Tổng số users</div>
+                <div class="dashboard-card-value" id="total-users">...</div>
+            </div>
+            <div class="dashboard-card dashboard-card-green">
+                <div class="dashboard-card-icon"><span class="icon-bg icon-bg-green"><i class="fas fa-user-check"></i></span></div>
+                <div class="dashboard-card-label">Users đang hoạt động</div>
+                <div class="dashboard-card-value" id="active-users">...</div>
+            </div>
+            <div class="dashboard-card dashboard-card-yellow">
+                <div class="dashboard-card-icon"><span class="icon-bg icon-bg-yellow"><i class="fas fa-user-clock"></i></span></div>
+                <div class="dashboard-card-label">Users mới tháng này</div>
+                <div class="dashboard-card-value" id="new-users-month">...</div>
+            </div>
+            <div class="dashboard-card dashboard-card-red">
+                <div class="dashboard-card-icon"><span class="icon-bg icon-bg-red"><i class="fas fa-user-shield"></i></span></div>
+                <div class="dashboard-card-label">Admins</div>
+                <div class="dashboard-card-value" id="admin-count">...</div>
+            </div>
+        </div>
+
+        <!-- User Statistics Row -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Phân Bố Users Theo Vai Trò</h5>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 300px; position: relative;">
+                            <canvas id="user-role-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Users Đăng Ký Theo Tháng</h5>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 300px; position: relative;">
+                            <canvas id="user-registration-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Information -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Thông Tin Hệ Thống</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h6 class="text-muted">Tổng số phim</h6>
+                                    <h4 id="total-movies">...</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h6 class="text-muted">Tổng số suất chiếu</h6>
+                                    <h4 id="total-showtimes">...</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h6 class="text-muted">Tổng số booking</h6>
+                                    <h4 id="total-bookings">...</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h6 class="text-muted">Tổng doanh thu</h6>
+                                    <h4 id="total-revenue">...</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Hoạt Động Gần Đây</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="recent-activity-list">
+                            <div class="text-center text-muted">Đang tải...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- User Management Tab -->
+    <div class="tab-pane fade" id="user-management">
+        <h2 class="mb-4">Quản lý user</h2>
+        <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+            <input type="text" id="user-search" class="form-control" style="max-width:220px" placeholder="Tìm kiếm tên hoặc email...">
+            <select id="user-role-filter" class="form-select" style="max-width:160px">
+                <option value="">Tất cả vai trò</option>
+                <option value="admin">Admin</option>
+                <option value="staff">Staff</option>
+                <option value="customer">Customer</option>
+            </select>
+            <select id="user-status-filter" class="form-select" style="max-width:160px">
+                <option value="">Tất cả trạng thái</option>
+                <option value="active">Đang hoạt động</option>
+                <option value="inactive">Ngưng hoạt động</option>
+            </select>
+            <button class="btn btn-primary ms-auto" id="add-user-btn"><i class="fas fa-plus me-1"></i>Thêm user</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle" id="user-table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tên</th>
+                        <th>Email</th>
+                        <th>Vai trò</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                    <!-- User rows render JS -->
+                </tbody>
+            </table>
+        </div>
+        <nav>
+            <ul class="pagination justify-content-end mt-3" id="user-pagination">
+                <!-- Pagination render JS -->
+            </ul>
+        </nav>
+        <div id="user-message" class="mt-2"></div>
+    </div>
+
+    <!-- System Logs Tab -->
+    <div class="tab-pane fade" id="system-logs">
+        <h2 class="mb-4">Logs Hệ Thống</h2>
+        
+
+
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="activity-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="role-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Export Button -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <button class="btn btn-warning" id="export-logs-btn">
+                    <i class="fas fa-download me-2"></i>Xuất Logs
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Bộ lọc</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="activity-type-filter" class="form-label">Loại hoạt động</label>
+                        <select id="activity-type-filter" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option value="login">Đăng nhập</option>
+                            <option value="logout">Đăng xuất</option>
+                            <option value="booking">Đặt vé</option>
+                            <option value="payment">Thanh toán</option>
+                            <option value="admin_action">Hành động Admin</option>
+                            <option value="staff_action">Hành động Staff</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="user-role-filter" class="form-label">Vai trò</label>
+                        <select id="user-role-filter" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option value="admin">Admin</option>
+                            <option value="staff">Staff</option>
+                            <option value="customer">Customer</option>
+                            <option value="manager">Manager</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="success-filter" class="form-label">Trạng thái</label>
+                        <select id="success-filter" class="form-select">
+                            <option value="">Tất cả</option>
+                            <option value="true">Thành công</option>
+                            <option value="false">Thất bại</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="date-from-filter" class="form-label">Từ ngày</label>
+                        <input type="date" id="date-from-filter" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="date-to-filter" class="form-label">Đến ngày</label>
+                        <input type="date" id="date-to-filter" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="log-search-input" class="form-label">Tìm kiếm</label>
+                        <input type="text" id="log-search-input" class="form-control" placeholder="Email...">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button id="clear-filters-btn" class="btn btn-secondary">
+                            <i class="fas fa-times me-1"></i>Xóa bộ lọc
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs Table -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Danh sách Logs</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Loại hoạt động</th>
+                                <th>Email</th>
+                                <th>Vai trò</th>
+                                <th>Thời gian</th>
+                                <th>Trạng thái</th>
+                                <th>IP</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body">
+                            <tr>
+                                <td colspan="7" class="text-center">Đang tải dữ liệu...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pagination justify-content-center" id="logs-pagination">
+                        <!-- Pagination will be rendered here -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thêm/Sửa User -->
+    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="userModalLabel">Thêm user</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="user-form">
+              <input type="hidden" id="user-id">
+              <div class="mb-3">
+                <label for="user-fullname" class="form-label">Họ tên</label>
+                <input type="text" class="form-control" id="user-fullname" required>
+              </div>
+              <div class="mb-3">
+                <label for="user-email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="user-email" required>
+              </div>
+              <div class="mb-3">
+                <label for="user-role" class="form-label">Vai trò</label>
+                <select class="form-select" id="user-role" required>
+                  <option value="admin">Admin</option>
+                  <option value="staff">Staff</option>
+                  <option value="customer">Customer</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="user-status" class="form-label">Trạng thái</label>
+                <select class="form-select" id="user-status" required>
+                  <option value="active">Đang hoạt động</option>
+                  <option value="inactive">Ngưng hoạt động</option>
+                </select>
+              </div>
+              <div class="mb-3" id="user-password-group">
+                <label for="user-password" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" id="user-password" minlength="4">
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Lưu</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="system-logs">
+        <h2 class="mb-4">Logs hệ thống</h2>
+        <p>Tính năng xem logs hệ thống sẽ được phát triển sau.</p>
+    </div>
+</div>
+
+{% block extra_css %}
+{{ super() }}
+<style>
+.dashboard-cards-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+.dashboard-card {
+    flex: 1;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    padding: 32px 28px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    transition: box-shadow 0.2s;
+}
+.dashboard-card-icon {
+    margin-bottom: 12px;
+}
+.icon-bg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 32px;
+    border-radius: 16px;
+    background: #f0f2f8;
+    font-size: 22px;
+}
+.icon-bg-blue { background: #e3edff; color: #3498fd; }
+.icon-bg-green { background: #d6f5e7; color: #2ecc71; }
+.icon-bg-yellow { background: #fff7d6; color: #f1c40f; }
+.icon-bg-red { background: #fff0f0; color: #fff; }
+.dashboard-card-label {
+    font-size: 1.08rem;
+    color: #555;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+.dashboard-card-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #222;
+}
+.dashboard-card-red {
+    background: #e53935;
+    color: #fff;
+}
+.dashboard-card-red .dashboard-card-label,
+.dashboard-card-red .dashboard-card-value {
+    color: #fff;
+}
+.dashboard-card-red .icon-bg-red {
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+}
+@media (max-width: 991px) {
+    .dashboard-cards-row { flex-direction: column; gap: 16px; }
+    .dashboard-card { padding: 24px 16px; }
+}
+#user-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 4px 12px;
+    margin-top: 16px;
+}
+#user-pagination .page-item,
+#user-pagination .page-item.disabled,
+#user-pagination .page-item.active {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+#user-pagination .page-link, #user-pagination .page-link:visited {
+    border: none;
+    background: transparent;
+    color: #1976d2;
+    font-size: 1.1rem;
+    min-width: 44px;
+    min-height: 44px;
+    height: 44px;
+    width: 44px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    margin: 0 1px;
+    font-weight: 500;
+}
+#user-pagination .page-link:hover {
+    background: #e3f0fd;
+    color: #1565c0;
+}
+#user-pagination .page-item.active .page-link {
+    background: #1976d2;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.08);
+}
+#user-pagination .page-item.disabled .page-link {
+    color: #bbb;
+    pointer-events: none;
+    background: #f5f5f5;
+}
+#user-pagination .page-item.disabled .page-link span {
+    color: #bbb;
+}
+#user-pagination input[type=number] {
+    padding: 4px 8px;
+    font-size: 1.1rem;
+    border: 1.5px solid #d0d7de;
+    border-radius: 8px;
+    width: 56px;
+    height: 44px;
+    text-align: center;
+    margin-left: 8px;
+    margin-right: 4px;
+    font-weight: 600;
+    color: #222;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+#user-pagination input[type=number]:focus {
+    outline: none;
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px #1976d233;
+}
+#user-pagination span {
+    font-size: 1.1rem;
+    color: #6c757d;
+    font-weight: 500;
+    margin-left: 2px;
+}
+#user-pagination .page-item.disabled .page-link,
+#user-pagination .page-item.disabled {
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+</style>
+{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function getAuthHeaders() {
+  const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  return headers;
+}
+// Load page when document ready
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Bootstrap tabs
+    const triggerTabList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tab"]'));
+    triggerTabList.forEach(function (triggerEl) {
+        const tabTrigger = new bootstrap.Tab(triggerEl);
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault();
+            tabTrigger.show();
+        });
+    });
+});
+
+// --- Quản lý user: Fetch & Render ---
+const userTableBody = document.getElementById('user-table-body');
+const userPagination = document.getElementById('user-pagination');
+const userMessage = document.getElementById('user-message');
+const userSearch = document.getElementById('user-search');
+const userRoleFilter = document.getElementById('user-role-filter');
+const userStatusFilter = document.getElementById('user-status-filter');
+let userPage = 1;
+let userPageSize = 10;
+
+async function fetchUsers(page=1) {
+    userMessage.textContent = '';
+    let url = `/api/users?page=${page}&page_size=${userPageSize}`;
+    const role = userRoleFilter.value;
+    const status = userStatusFilter.value;
+    const name = userSearch.value.trim();
+    if (role) url += `&role=${role}`;
+    if (status) url += `&status=${status}`;
+    if (name) url += `&name=${encodeURIComponent(name)}`;
+    try {
+        const res = await fetch(url, { headers: getAuthHeaders() });
+        if (!res.ok) throw new Error('Lỗi khi lấy danh sách user');
+        const data = await res.json();
+        renderUserTable(data.users);
+        renderUserPagination(data.page, data.page_size, data.total);
+    } catch (err) {
+        userMessage.textContent = err.message;
+        userTableBody.innerHTML = '';
+        userPagination.innerHTML = '';
+    }
+}
+
+// --- Modal Thêm/Sửa User ---
+const userModal = new bootstrap.Modal(document.getElementById('userModal'));
+const userForm = document.getElementById('user-form');
+const userIdInput = document.getElementById('user-id');
+const userFullnameInput = document.getElementById('user-fullname');
+const userEmailInput = document.getElementById('user-email');
+const userRoleInput = document.getElementById('user-role');
+const userStatusInput = document.getElementById('user-status');
+const userPasswordInput = document.getElementById('user-password');
+const userPasswordGroup = document.getElementById('user-password-group');
+let isEditUser = false;
+
+// Mở modal thêm user
+const addUserBtn = document.getElementById('add-user-btn');
+if (addUserBtn) {
+  addUserBtn.onclick = () => {
+    isEditUser = false;
+    userForm.reset();
+    userIdInput.value = '';
+    userModal._element.querySelector('.modal-title').textContent = 'Thêm user';
+    userPasswordGroup.style.display = '';
+    userModal.show();
+  };
+}
+
+// Mở modal sửa user
+userTableBody.addEventListener('click', function(e) {
+  if (e.target.closest('.btn-warning')) {
+    const tr = e.target.closest('tr');
+    const tds = tr.querySelectorAll('td');
+    isEditUser = true;
+    userIdInput.value = tr.dataset.userid;
+    userFullnameInput.value = tds[0].textContent.trim();
+    userEmailInput.value = tds[1].textContent.trim();
+    userRoleInput.value = tds[2].textContent.trim();
+    userStatusInput.value = tds[3].textContent.includes('Đang') ? 'active' : 'inactive';
+    userPasswordInput.value = '';
+    userModal._element.querySelector('.modal-title').textContent = 'Sửa user';
+    userPasswordGroup.style.display = 'none';
+    userModal.show();
+  }
+});
+
+// Submit form thêm/sửa user
+userForm.onsubmit = async function(e) {
+  e.preventDefault();
+  const id = userIdInput.value;
+  const data = {
+    full_name: userFullnameInput.value.trim(),
+    email: userEmailInput.value.trim(),
+    role: userRoleInput.value,
+    is_active: userStatusInput.value === 'active',
+  };
+  if (!isEditUser) data.password = userPasswordInput.value;
+  try {
+    let res;
+    if (isEditUser) {
+      res = await fetch(`/api/users/${id}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data)
+      });
+    } else {
+      res = await fetch('/api/users', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data)
+      });
+    }
+    const result = await res.json();
+    if (res.ok) {
+      userModal.hide();
+      fetchUsers(userPage);
+      userMessage.textContent = result.message || 'Thành công!';
+      userMessage.className = 'alert alert-success';
+    } else {
+      userMessage.textContent = result.error || 'Có lỗi xảy ra!';
+      userMessage.className = 'alert alert-danger';
+    }
+  } catch (err) {
+    userMessage.textContent = err.message;
+    userMessage.className = 'alert alert-danger';
+  }
+};
+
+// Xác nhận xóa user
+userTableBody.addEventListener('click', function(e) {
+  if (e.target.closest('.btn-danger')) {
+    const tr = e.target.closest('tr');
+    const userId = tr.dataset.userid;
+    if (confirm('Bạn có chắc chắn muốn xóa user này?')) {
+      fetch(`/api/users/${userId}`, { method: 'DELETE', headers: getAuthHeaders() })
+        .then(res => res.json())
+        .then(result => {
+          if (result.message) {
+            fetchUsers(userPage);
+            userMessage.textContent = result.message;
+            userMessage.className = 'alert alert-success';
+          } else {
+            userMessage.textContent = result.error || 'Có lỗi xảy ra!';
+            userMessage.className = 'alert alert-danger';
+          }
+        });
+    }
+  }
+});
+
+// Gán data-userid cho từng row khi render
+function renderUserTable(users) {
+  userTableBody.innerHTML = '';
+  if (!users.length) {
+    userTableBody.innerHTML = '<tr><td colspan="6" class="text-center">Không có user nào</td></tr>';
+    return;
+  }
+  users.forEach(u => {
+    const tr = document.createElement('tr');
+    tr.dataset.userid = u._id;
+    tr.innerHTML = `
+      <td>${u.full_name || ''}</td>
+      <td>${u.email || ''}</td>
+      <td>${u.role || ''}</td>
+      <td>${u.is_active ? '<span class="badge bg-success">Đang hoạt động</span>' : '<span class="badge bg-secondary">Ngưng hoạt động</span>'}</td>
+      <td>${u.created_at ? new Date(u.created_at).toLocaleDateString() : ''}</td>
+      <td>
+        <button class="btn btn-sm btn-warning me-1" title="Sửa"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-sm btn-danger" title="Xóa"><i class="fas fa-trash"></i></button>
+      </td>
+    `;
+    userTableBody.appendChild(tr);
+  });
+}
+
+function renderUserPagination(page, pageSize, total) {
+    userPagination.innerHTML = '';
+    const totalPages = Math.ceil(total / pageSize);
+    if (totalPages <= 1) return;
+    let html = '';
+    // First & Prev
+    html += `<li class="page-item${page === 1 ? ' disabled' : ''}"><a class="page-link" href="#" data-page="1">&laquo;</a></li>`;
+    html += `<li class="page-item${page === 1 ? ' disabled' : ''}"><a class="page-link" href="#" data-page="${page - 1}">&lsaquo;</a></li>`;
+    // Page numbers (max 5, ...)
+    let start = Math.max(1, page - 2);
+    let end = Math.min(totalPages, page + 2);
+    if (page <= 3) { start = 1; end = Math.min(5, totalPages); }
+    if (page >= totalPages - 2) { end = totalPages; start = Math.max(1, totalPages - 4); }
+    if (start > 1) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+    for (let p = start; p <= end; p++) {
+        html += `<li class="page-item${p === page ? ' active' : ''}"><a class="page-link" href="#" data-page="${p}">${p}</a></li>`;
+    }
+    if (end < totalPages) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+    // Next & Last
+    html += `<li class="page-item${page === totalPages ? ' disabled' : ''}"><a class="page-link" href="#" data-page="${page + 1}">&rsaquo;</a></li>`;
+    html += `<li class="page-item${page === totalPages ? ' disabled' : ''}"><a class="page-link" href="#" data-page="${totalPages}">&raquo;</a></li>`;
+    // Input box + total
+    html += `<li class="page-item ms-2" style="border:none;background:transparent"><input type="number" min="1" max="${totalPages}" value="${page}" id="user-page-input" style="width:48px;text-align:center;border-radius:8px;border:1px solid #ccc;"> <span class="text-secondary ms-1">of ${totalPages} pages</span></li>`;
+    userPagination.innerHTML = html;
+    // Sự kiện click
+    userPagination.querySelectorAll('a.page-link').forEach(a => {
+        a.onclick = function(e) {
+            e.preventDefault();
+            const goto = parseInt(this.dataset.page);
+            if (!isNaN(goto) && goto >= 1 && goto <= totalPages && goto !== page) {
+                userPage = goto;
+                fetchUsers(userPage);
+            }
+        };
+    });
+    // Sự kiện nhập số trang
+    const pageInput = document.getElementById('user-page-input');
+    if (pageInput) {
+        pageInput.onchange = function() {
+            let val = parseInt(this.value);
+            if (!isNaN(val) && val >= 1 && val <= totalPages && val !== page) {
+                userPage = val;
+                fetchUsers(userPage);
+            } else {
+                this.value = page;
+            }
+        };
+    }
+}
+
+// --- Sự kiện filter, search, tab ---
+[userSearch, userRoleFilter, userStatusFilter].forEach(el => {
+    el && el.addEventListener('input', () => { userPage = 1; fetchUsers(userPage); });
+});
+
+// Khi chuyển sang tab Quản lý user thì load danh sách
+const userTabTrigger = document.querySelector('a[href="#user-management"]');
+if (userTabTrigger) {
+    userTabTrigger.addEventListener('shown.bs.tab', function() {
+        userPage = 1;
+        fetchUsers(userPage);
+    });
+}
+// Nếu tab đang active khi load trang thì fetch luôn
+if (document.getElementById('user-management').classList.contains('active')) {
+    fetchUsers(userPage);
+}
+
+// Load admin dashboard scripts
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+
+<!-- Fix logout button -->
+<style>
+/* Force logout button to be visible */
+.sidebar-logout {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1001 !important;
+}
+
+.sidebar-logout .btn {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Ensure sidebar has proper flex layout */
+.sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+}
+
+.sidebar-menu {
+    flex: 1 !important;
+    min-height: 0 !important;
+}
+
+.sidebar-logout {
+    flex-shrink: 0 !important;
+    margin-top: auto !important;
+}
+</style>
+
+<script>
+// Only add CSS fix for admin, use layout's handleLogout
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔍 Setting up logout button CSS fix in admin.html...');
+    
+    // Wait a bit for layout to load
+    setTimeout(function() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            console.log('✅ Logout button found in admin');
+            
+            // Force button to be visible with CSS
+            logoutBtn.style.display = 'block';
+            logoutBtn.style.visibility = 'visible';
+            logoutBtn.style.opacity = '1';
+            logoutBtn.style.pointerEvents = 'auto';
+            
+            console.log('✅ Logout button CSS fix complete for admin');
+        } else {
+            console.log('❌ Logout button not found in admin');
+        }
+    }, 1000); // Wait 1 second
+});
+</script>
+{% endblock %} 

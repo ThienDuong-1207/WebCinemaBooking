@@ -1,0 +1,24 @@
+{% extends "layout_customer.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/ticket-progressive.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="mb-2">
+            <i class="fas fa-ticket-alt text-primary me-2"></i>
+            Vé Của Tôi
+        </h2>
+        <p class="text-muted">Tất cả vé điện tử của bạn - Sẵn sàng để quét tại rạp</p>
+    </div>
+    <div id="tickets-container" class="row justify-content-center">
+        <!-- Tickets will be dynamically inserted here -->
+    </div>
+</div>
+
+<!-- Local QR Code generator -->
+<script src="/static/js/simple-qr.js"></script>
+<script src="/static/js/ticket.js"></script>
+{% endblock %} 

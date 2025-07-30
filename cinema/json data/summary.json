@@ -1,0 +1,37 @@
+{
+  "export_info": {
+    "timestamp": "2025-07-30T10:54:45.343621",
+    "total_collections": 13,
+    "exported_files": 13
+  },
+  "collections": [
+    "seats",
+    "tickets",
+    "bookings",
+    "cinemas",
+    "showtimes",
+    "payments",
+    "brokenSeats",
+    "logs",
+    "seatlocks",
+    "halls",
+    "movies",
+    "users",
+    "broken_seats"
+  ],
+  "exported_files": [
+    "export_seats_20250730_105445.json",
+    "export_tickets_20250730_105445.json",
+    "export_bookings_20250730_105445.json",
+    "export_cinemas_20250730_105445.json",
+    "export_showtimes_20250730_105445.json",
+    "export_payments_20250730_105445.json",
+    "export_brokenSeats_20250730_105445.json",
+    "export_logs_20250730_105445.json",
+    "export_seatlocks_20250730_105445.json",
+    "export_halls_20250730_105445.json",
+    "export_movies_20250730_105445.json",
+    "export_users_20250730_105445.json",
+    "export_broken_seats_20250730_105445.json"
+  ]
+}

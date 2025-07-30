@@ -1,0 +1,21 @@
+{
+  "collection_name": "cinemas",
+  "export_timestamp": "2025-07-30T10:54:45.324376",
+  "total_documents": 2,
+  "data": [
+    {
+      "_id": "cinema_hn",
+      "name": "Storia Hà Nội",
+      "city": "Hà Nội",
+      "address": "116 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+      "is_active": true
+    },
+    {
+      "_id": "cinema_sg",
+      "name": "Storia Sài Gòn",
+      "city": "Hồ Chí Minh",
+      "address": "230 Nguyễn Trãi, Quận 1, TP.HCM",
+      "is_active": true
+    }
+  ]
+}

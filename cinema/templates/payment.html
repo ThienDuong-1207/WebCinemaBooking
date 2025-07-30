@@ -1,0 +1,436 @@
+{% extends 'layout_customer.html' %}
+
+{% block title %}Thanh toán - Storia{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="text-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="fw-bold mb-0">Thanh toán</h2>
+            <div id="countdown-display" class="countdown-inline d-none">
+                <div class="d-flex align-items-center bg-warning text-dark px-3 py-2 rounded">
+                    <i class="fas fa-clock me-2"></i>
+                    <span class="me-2">Thời gian còn lại:</span>
+                    <span id="countdown-timer" class="fw-bold">07:00</span>
+                </div>
+            </div>
+        </div>
+        <p class="text-muted">Hoàn tất đặt vé của bạn</p>
+    </div>
+    
+    <div class="row">
+        <!-- Cột trái: Thông tin đặt vé + Chi tiết giá + Buttons -->
+        <div class="col-lg-6">
+
+            <!-- Thông tin đặt vé -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-ticket-alt me-2"></i>Thông tin đặt vé</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img id="payment-movie-poster" src="" alt="Poster phim" class="img-fluid rounded" style="max-height: 150px;">
+                        </div>
+                        <div class="col-md-9">
+                            <h5 id="payment-movie-title" class="fw-bold mb-2"></h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Rạp:</strong> <span id="payment-cinema"></span></p>
+                                    <p class="mb-1"><strong>Phòng:</strong> <span id="payment-hall"></span></p>
+                                    <p class="mb-1"><strong>Ngày:</strong> <span id="payment-date"></span></p>
+                                    <p class="mb-1"><strong>Giờ:</strong> <span id="payment-time"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Ghế:</strong> <span id="payment-seats"></span></p>
+                                    <p class="mb-1"><strong>Loại vé:</strong> <span id="payment-seat-types"></span></p>
+                                    <p class="mb-1"><strong>Mã đặt vé:</strong> <span id="payment-booking-id" class="text-primary"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chi tiết giá -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-calculator me-2"></i>Chi tiết giá</h5>
+                </div>
+                <div class="card-body">
+                    <div id="price-breakdown"></div>
+                    <hr>
+                    <div class="d-flex justify-content-between fs-5 fw-bold text-warning">
+                        <span>Tổng cộng:</span>
+                        <span id="payment-total-amount"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between align-items-center">
+                <button id="back-to-booking" class="btn btn-outline-secondary px-4">
+                    <i class="fas fa-arrow-left me-2"></i>Quay lại
+                </button>
+                <div class="d-flex align-items-center">
+                    <div class="text-end me-3">
+                        <div class="text-muted small">Tổng cộng:</div>
+                        <div class="fw-bold text-warning fs-5" id="payment-total-final"></div>
+                    </div>
+                    <button id="confirm-payment" class="btn btn-warning px-4 py-2 fw-bold">
+                        <i class="fas fa-credit-card me-2"></i>Thanh toán
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Cột phải: Phương thức thanh toán + Điều khoản -->
+        <div class="col-lg-6">
+            <!-- Phương thức thanh toán -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-credit-card me-2"></i>Phương thức thanh toán</h5>
+                </div>
+                <div class="card-body">
+                    <div class="payment-methods">
+                        <div class="form-check payment-method-option p-3 border rounded mb-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="onepay" value="onepay" checked>
+                            <label class="form-check-label d-flex align-items-center" for="onepay">
+                                <img src="https://img.icons8.com/color/48/visa.png" alt="Visa" class="me-2" style="width: 30px;">
+                                <div class="text-start">
+                                    <strong>OnePay</strong>
+                                    <small class="text-muted d-block">Visa, Master, JCB / ATM / QR Ngân hàng / Apple Pay</small>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-check payment-method-option p-3 border rounded mb-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="shopeepay" value="shopeepay">
+                            <label class="form-check-label d-flex align-items-center" for="shopeepay">
+                                <img src="https://img.icons8.com/color/48/shopee.png" alt="ShopeePay" class="me-2" style="width: 30px;">
+                                <div class="text-start">
+                                    <strong>ShopeePay</strong>
+                                    <small class="text-muted d-block">Giảm 5K mỗi đơn khi thanh toán</small>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-check payment-method-option p-3 border rounded mb-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="momo" value="momo">
+                            <label class="form-check-label d-flex align-items-center" for="momo">
+                                <img src="/static/img/MOMO-Logo-App.png" alt="MoMo" class="me-2" style="width: 30px;">
+                                <div class="text-start">
+                                    <strong>Ví Điện Tử MoMo</strong>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-check payment-method-option p-3 border rounded mb-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="zalopay" value="zalopay">
+                            <label class="form-check-label d-flex align-items-center" for="zalopay">
+                                <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-ZaloPay-Square.png" alt="ZaloPay" class="me-2" style="width: 30px;">
+                                <div class="text-start">
+                                    <strong>ZaloPay</strong>
+                                    <small class="text-muted d-block">Bạn mới ZaloPay nhận mã GIẢM50% tối đa 40k</small>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-check payment-method-option p-3 border rounded mb-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="vnpay" value="vnpay">
+                            <label class="form-check-label d-flex align-items-center" for="vnpay">
+                                <img src="/static/img/vnpay-logo.png" alt="VNPAY" class="me-2" style="width: 30px;">
+                                <div class="text-start">
+                                    <strong>VNPAY</strong>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<!-- Loading Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-4">
+                <div class="spinner-border text-warning mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5>Đang xử lý thanh toán...</h5>
+                <p class="text-muted mb-0">Vui lòng không đóng trang này</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-4">
+                <div class="text-success mb-3">
+                    <i class="fas fa-check-circle fa-3x"></i>
+                </div>
+                <h5 class="text-success">Thanh toán thành công!</h5>
+                <p class="text-muted">Vé của bạn đã được đặt thành công</p>
+                <div class="mt-4">
+                    <button type="button" class="btn btn-warning me-2" onclick="showTicketModal()">
+                        <i class="fas fa-ticket-alt me-2"></i>Xem vé
+                    </button>
+                    <button type="button" class="btn btn-success me-2" onclick="goToHistory()">
+                        <i class="fas fa-history me-2"></i>Xem lịch sử
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="goToHome()">
+                        <i class="fas fa-home me-2"></i>Về trang chủ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ticket Display Modal -->
+<div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-ticket-alt me-2"></i>Vé điện tử - Storia Cinema
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div id="tickets-container">
+                    <!-- Tickets will be dynamically generated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-warning" onclick="printTickets()">
+                    <i class="fas fa-print me-2"></i>In vé
+                </button>
+                <button type="button" class="btn btn-success" onclick="goToHistory()">
+                    <i class="fas fa-history me-2"></i>Xem lịch sử
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.payment-method-option {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.payment-method-option:hover {
+    background-color: #f8f9fa;
+    border-color: #dee2e6 !important;
+}
+
+.payment-method-option input[type="radio"]:checked + label {
+    color: #ff9800;
+    font-weight: 500;
+}
+
+.payment-method-option:has(input[type="radio"]:checked) {
+    border-color: #ff9800 !important;
+    background-color: #fff8e1;
+}
+
+.card-header {
+    border-bottom: 2px solid #ff9800;
+}
+
+#price-breakdown .price-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+#price-breakdown .price-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Ticket Design */
+.ticket-item {
+    margin-bottom: 20px;
+    border: 2px dashed #ff9800;
+    border-radius: 15px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #fff8e1 0%, #ffffff 100%);
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.2);
+}
+
+.ticket-header {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ticket-body {
+    padding: 20px;
+}
+
+.ticket-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.movie-info {
+    flex: 1;
+}
+
+.movie-poster {
+    width: 80px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-left: 20px;
+}
+
+.barcode-section {
+    background: #f8f9fa;
+    padding: 15px;
+    text-align: center;
+    border-top: 1px dashed #dee2e6;
+    margin-top: 15px;
+}
+
+.barcode-display {
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #333;
+    background: white;
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    margin: 10px 0;
+    display: inline-block;
+}
+
+.ticket-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.seat-highlight {
+    background: #ff9800;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Countdown inline styles */
+.countdown-inline {
+    transition: all 0.3s ease;
+}
+
+.countdown-inline .bg-warning {
+    box-shadow: 0 2px 10px rgba(255, 152, 0, 0.3);
+}
+
+.countdown-inline .text-danger {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* Button pulse effect */
+.btn-pulse {
+    animation: buttonPulse 1s infinite;
+}
+
+@keyframes buttonPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive layout for payment page */
+@media (max-width: 991px) {
+    .col-lg-6 {
+        margin-bottom: 20px;
+    }
+    
+    .ticket-info {
+        flex-direction: column;
+    }
+    
+    .movie-poster {
+        margin-left: 0;
+        margin-top: 15px;
+    }
+    
+    .ticket-details {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Mobile responsive for countdown */
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .countdown-inline {
+        margin-top: 15px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .modal-header, .modal-footer {
+        display: none !important;
+    }
+    
+    .ticket-item {
+        page-break-inside: avoid;
+        margin-bottom: 30px;
+    }
+}
+</style>
+
+<script src="{{ url_for('static', filename='js/countdown-timer.js') }}"></script>
+<script src="{{ url_for('static', filename='js/payment.js') }}"></script>
+{% endblock %} 

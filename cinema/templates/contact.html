@@ -1,0 +1,159 @@
+{% extends "layout_customer.html" %}
+{% block title %}Contact Us{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="about-us-section text-center mb-4">
+    <h2 class="fw-bold mb-4">About Us</h2>
+    <img src="/static/img/aboutus.png" alt="Our Team" class="img-fluid rounded-4 shadow mb-4" style="max-width: 900px;">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <div class="member-card bg-light rounded-4 shadow-sm p-3 h-100">
+          <div class="fw-bold">Vo Ngoc Phu</div>
+          <div class="text-secondary small mb-1">Founder & Director</div>
+          <div class="text-muted" style="font-size: 0.97rem;">He is the man with the longest Lap in the world. He also has special nicknames such as: “Phu tho dien”, “King of Lap”</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="member-card bg-light rounded-4 shadow-sm p-3 h-100">
+          <div class="fw-bold">Duong Chi Thien</div>
+          <div class="text-secondary small mb-1">Marketing & Partnerships</div>
+          <div class="text-muted" style="font-size: 0.97rem;">He is the biggest brother in my group. He loves to call my group’s leader by the nickname “Phu Tho Dien”, “King of Lap”</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="member-card bg-light rounded-4 shadow-sm p-3 h-100">
+          <div class="fw-bold">Le Tan Nguyen</div>
+          <div class="text-secondary small mb-1">Finance & Legal</div>
+          <div class="text-muted" style="font-size: 0.97rem;">He is the most relaxed guy in my group and a great explorer of digital universes. He loves to play anime characters, fighting and defending. He also likes to be a farmer, just like our group leader.</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="member-card bg-light rounded-4 shadow-sm p-3 h-100">
+          <div class="fw-bold">Duong Ngoc Linh Dan</div>
+          <div class="text-secondary small mb-1">Support & Care</div>
+          <div class="text-muted" style="font-size: 0.97rem;">She is a petite girl, modest in height, gentle and easy-going. She especially loves sleeping, often taking naps whenever possible, as a way to recharge her energy for the long day.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container py-5">
+  <h1 class="text-center fw-bold mb-4">Contact Us</h1>
+  <div class="row justify-content-center mb-4">
+    <div class="col-lg-10">
+      <div class="bg-white shadow rounded-4 p-4 d-flex flex-wrap justify-content-between align-items-center gap-4">
+        <div class="d-flex align-items-start gap-3 flex-fill">
+          <span class="fs-2 text-primary"><i class="fas fa-map-marker-alt"></i></span>
+          <div>
+            <div class="fw-bold">Physical Address</div>
+            <div>69/68 Dang Thuy Tram Street, Ward 13,<br>Binh Thanh District, Ho Chi Minh City, 70000</div>
+          </div>
+        </div>
+        <div class="d-flex align-items-start gap-3 flex-fill">
+          <span class="fs-2 text-success"><i class="fas fa-phone-alt"></i></span>
+          <div>
+            <div class="fw-bold">Phone Numbers</div>
+            <div>1-555-123-4567<br>1-800-123-4567</div>
+          </div>
+        </div>
+        <div class="d-flex align-items-start gap-3 flex-fill">
+          <span class="fs-2 text-purple"><i class="fas fa-envelope"></i></span>
+          <div>
+            <div class="fw-bold">Email Address</div>
+            <div>group7@vlu.vn<br>group7@vlu.vn</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row g-4 align-items-stretch" style="min-height:340px;">
+    <div class="col-lg-6 d-flex flex-column h-100">
+      <div class="contact-map-frame flex-fill h-100" style="min-height:340px;">
+        <div style="width: 100%; height: 100%; background: #f8f9fa; display: flex; align-items: center; justify-content: center; border: 2px dashed #dee2e6; border-radius: 16px;">
+            <div class="text-center text-muted">
+                <i class="fas fa-map-marker-alt fa-3x mb-3"></i>
+                <h5>Cinema Location</h5>
+                <p class="mb-0">116 Nguyễn Du, Quận 1, Tp.HCM</p>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="bg-white rounded-4 shadow-sm p-4 h-100">
+        <h4 class="fw-bold mb-2">Send us a message</h4>
+        <p class="text-muted mb-3">If you have any problems or need assistance, please contact us using this form or by calling the number below.</p>
+        <form>
+          <div class="row g-2 mb-2">
+            <div class="col-md-6">
+              <input type="text" class="form-control" placeholder="First Name *" required>
+            </div>
+            <div class="col-md-6">
+              <input type="text" class="form-control" placeholder="Last Name *" required>
+            </div>
+          </div>
+          <div class="row g-2 mb-2">
+            <div class="col-md-6">
+              <input type="email" class="form-control" placeholder="Your Email *" required>
+            </div>
+            <div class="col-md-6">
+              <input type="text" class="form-control" placeholder="Your Phone Number">
+            </div>
+          </div>
+          <div class="mb-2">
+            <input type="text" class="form-control" placeholder="Subject *" required>
+          </div>
+          <div class="mb-3">
+            <textarea class="form-control" rows="4" placeholder="Message *" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+.text-purple { color: #7c3aed; }
+.about-us-section img {
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.member-card {
+  min-height: 180px;
+  transition: box-shadow 0.2s, transform 0.2s, background 0.3s, color 0.3s;
+  background: #fff;
+  color: #222;
+}
+.member-card:hover {
+  background: #1976d2 !important;
+  color: #fff !important;
+  box-shadow: 0 8px 32px rgba(25,118,210,0.18);
+  transform: translateY(-4px) scale(1.03);
+}
+.member-card:hover * {
+  color: #fff !important;
+}
+.contact-map-frame {
+  height: 100%;
+  min-height: 340px;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: stretch;
+}
+.contact-map-frame iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  border: 0;
+  display: block;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Xóa class first-member nếu có
+  document.querySelectorAll('.member-card.first-member').forEach(e => e.classList.remove('first-member'));
+});
+</script>
+{% endblock %} 

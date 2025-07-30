@@ -1,0 +1,500 @@
+{% extends "layout_customer.html" %}
+
+{% block title %}Cinema{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cinema-hero {
+        background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                    url('/static/img/storia_cinema_1.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        margin-bottom: 40px;
+        transition: background-image 0.5s ease;
+    }
+    
+    .cinema-info {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .cinema-name {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #8B0000;
+        margin-bottom: 15px;
+    }
+    
+    .cinema-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
+    .cinema-contact {
+        flex: 1;
+        min-width: 300px;
+    }
+    
+    .cinema-contact p {
+        margin: 8px 0;
+        font-size: 1.1rem;
+        color: #333;
+    }
+    
+    .cinema-selector {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .form-select {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 10px 15px;
+        font-size: 1rem;
+        min-width: 200px;
+    }
+    
+    .date-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .date-tab {
+        padding: 12px 20px;
+        border: 2px solid #ddd;
+        border-radius: 25px;
+        background: white;
+        color: #666;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+    
+    .date-tab.active,
+    .date-tab:hover {
+        background: #8B0000;
+        color: white;
+        border-color: #8B0000;
+    }
+    
+    .movie-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+    
+    .movie-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .movie-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+    
+    .movie-poster {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+    }
+    
+    .movie-info {
+        padding: 20px;
+    }
+    
+    .movie-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    .price-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .price-title {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #8B0000;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+    
+    .price-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    
+    .price-table th,
+    .price-table td {
+        padding: 15px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+    
+    .price-table th {
+        background: #8B0000;
+        color: white;
+        font-weight: 700;
+    }
+    
+    .price-table tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+    
+    .price-highlight {
+        background: #fff3cd !important;
+        font-weight: 700;
+    }
+    
+    .location-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .location-title {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #8B0000;
+        margin-bottom: 25px;
+    }
+    
+    .location-info {
+        margin-bottom: 25px;
+    }
+    
+    .location-info p {
+        margin: 10px 0;
+        font-size: 1.1rem;
+        color: #333;
+    }
+    
+    .map-container {
+        width: 100%;
+        height: 300px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 20px;
+    }
+    
+    .map-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    
+    .cinema-description {
+        margin-top: 25px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        line-height: 1.6;
+        color: #555;
+    }
+    
+    /* Modal styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+    
+    .modal-content {
+        background: white;
+        border-radius: 15px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .modal-header {
+        padding: 20px 25px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .modal-header h3 {
+        margin: 0;
+        color: #8B0000;
+        font-weight: 700;
+    }
+    
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s;
+    }
+    
+    .close-btn:hover {
+        background: #f0f0f0;
+        color: #333;
+    }
+    
+    .modal-body {
+        padding: 25px;
+    }
+    
+    .date-section {
+        margin-bottom: 25px;
+    }
+    
+    .date-section h4 {
+        color: #8B0000;
+        font-weight: 700;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+    }
+    
+    .showtimes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 10px;
+    }
+    
+    .showtime-btn {
+        padding: 12px 15px;
+        border: 2px solid #8B0000;
+        background: white;
+        color: #8B0000;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+    }
+    
+    .showtime-btn:hover {
+        background: #8B0000;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .movie-info-modal {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .movie-info-modal h4 {
+        color: #333;
+        font-weight: 700;
+        margin-bottom: 5px;
+        font-size: 1.2rem;
+    }
+    
+    .movie-info-modal .cinema-name {
+        color: #8B0000;
+        font-weight: 600;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+    
+    .no-showtimes {
+        text-align: center;
+        padding: 30px 20px;
+        color: #666;
+    }
+    
+    .no-showtimes p {
+        margin: 0;
+        font-size: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .cinema-details {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .cinema-selector {
+            flex-direction: column;
+        }
+        
+        .form-select {
+            min-width: auto;
+        }
+        
+        .movie-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .price-table {
+            font-size: 0.9rem;
+        }
+        
+        .price-table th,
+        .price-table td {
+            padding: 8px 5px;
+        }
+        
+        .modal-content {
+            width: 95%;
+            max-height: 90vh;
+        }
+        
+        .showtimes-grid {
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 8px;
+        }
+        
+        .showtime-btn {
+            padding: 10px 12px;
+            font-size: 0.85rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Cinema Hero Section -->
+<div class="cinema-hero">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Storia Sài Gòn</h1>
+        <p class="lead">Trải nghiệm xem phim đẳng cấp quốc tế</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Cinema Information -->
+    <div class="cinema-info">
+        <h2 class="cinema-name">Storia Sài Gòn</h2>
+        <div class="cinema-details">
+            <div class="cinema-contact">
+                <p class="cinema-address"><i class="fas fa-map-marker-alt me-2"></i><strong>Địa chỉ:</strong> 116 Nguyễn Du, Quận 1, Tp.HCM</p>
+                <p class="cinema-phone"><i class="fas fa-phone me-2"></i><strong>Hotline:</strong> 1900 2224</p>
+            </div>
+            <div class="cinema-selector">
+                <select class="form-select" id="city-select">
+                    <option value="Hồ Chí Minh" selected>Hồ Chí Minh</option>
+                    <option value="Hà Nội">Hà Nội</option>
+                </select>
+                <select class="form-select" id="cinema-select">
+                    <option value="storia_sg" selected>Storia Sài Gòn</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Column - Movies & Prices -->
+        <div class="col-lg-8">
+            <!-- Date Selection -->
+            <div class="date-tabs">
+                <!-- Sẽ được cập nhật động từ JavaScript -->
+            </div>
+
+            <!-- Movies Section -->
+            <h3 class="mt-5 mb-3" style="color:#8B0000; font-weight:700;">PHIM</h3>
+            <div id="cinema-movie-list" class="row row-cols-1 row-cols-md-3 g-4">
+                <!-- JS sẽ render các card phim ở đây -->
+            </div>
+
+            <!-- Ticket Prices Section -->
+            <div class="price-section">
+                <h3 class="price-title">GIÁ VÉ</h3>
+                <h4 class="text-center mb-4">BẢNG GIÁ VÉ XEM PHIM</h4>
+                
+                <table class="price-table">
+                    <thead>
+                        <tr>
+                            <th>LOẠI GHẾ</th>
+                            <th>NGÀY TRONG TUẦN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ghế thường</td>
+                            <td class="price-highlight">90.000đ</td>
+                        </tr>
+                        <tr>
+                            <td>Ghế VIP</td>
+                            <td class="price-highlight">120.000đ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right Column - Location Information -->
+        <div class="col-lg-4">
+            <div class="location-section">
+                <h3 class="location-title">THÔNG TIN CHI TIẾT</h3>
+                
+                <div class="location-info">
+                    <p class="location-address"><i class="fas fa-map-marker-alt me-2"></i><strong>Địa chỉ:</strong> 116 Nguyễn Du, Quận 1, Tp.HCM</p>
+                    <p class="location-phone"><i class="fas fa-phone me-2"></i><strong>Số điện thoại:</strong> 1900 2224</p>
+                </div>
+
+                <div class="map-container">
+                    <div style="width: 100%; height: 300px; border-radius: 8px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; border: 2px dashed #dee2e6;">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-map-marker-alt fa-3x mb-3"></i>
+                            <h5>Storia Sài Gòn</h5>
+                            <p class="mb-0">116 Nguyễn Du, Quận 1, Tp.HCM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cinema-description">
+                    <p><strong>Storia Sài Gòn</strong> là một trong những rạp chiếu phim thuộc hệ thống Storia Cinema, chính thức đi vào hoạt động từ năm 2005. Đây là một trong những tổ hợp rạp chiếu phim tiêu chuẩn quốc tế đầu tiên tại Việt Nam với hệ thống phòng chiếu hiện đại, âm thanh chất lượng cao và hình ảnh sắc nét.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/cinema.js') }}"></script>
+{% endblock %} 

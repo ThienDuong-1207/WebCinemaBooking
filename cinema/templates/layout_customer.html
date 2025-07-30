@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Trang web đặt vé xem phim trực tuyến hiện đại và tiện lợi.">
+    <meta name="keywords" content="đặt vé, xem phim, rạp chiếu, vé online, phim mới">
+    <!-- Google Fonts: Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+
+    <title>{% block title %}Storia{% endblock %}</title>
+
+    <!-- Nhúng Bootstrap từ CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome cho icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Nhúng file CSS custom -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Block cho CSS tùy chỉnh của từng trang -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Nhúng Bootstrap JS (cho navbar, hiệu ứng)-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Nhúng file JS custom -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <!-- Navbar trắng hiện đại -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+      <div class="container">
+        <!-- Logo (có thể dùng chữ hoặc thay bằng hình sau) -->
+        <a class="navbar-brand d-flex align-items-center fw-bold" href="{{ url_for('home') }}" style="color:DarkRed; font-size:1.8rem;">
+          <span style="font-size:2rem;"><img src="/static/img/logo.jpg" height="38" alt="Logo"></span> &nbsp; Storia
+        </a>
+
+        <!-- Nút mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item mx-2">
+              <a class="nav-link active fw-semibold" aria-current="page" href="{{ url_for('home') }}" style="color:DarkRed;">Movie</a>
+            </li>
+            <li class="nav-item mx-2">
+              <a class="nav-link fw-semibold" href="{{ url_for('cinema') }}">Cinema/Price</a>
+            </li>
+            <li class="nav-item mx-2">
+              <a class="nav-link fw-semibold" href="{{ url_for('genres') }}">Genre</a>
+            </li>
+            <li class="nav-item mx-2">
+              <a class="nav-link fw-semibold" href="{{ url_for('contact') }}">Contact</a>
+            </li>
+          </ul>
+
+          <!-- Nút Mua vé và đăng nhập -->
+          <div class="d-flex align-items-center" style="gap: 12px;">
+            <!-- Tên user (hiện khi đã đăng nhập) -->
+            <span id="userName" class="fw-bold" style="color:#ff9800; font-size:1.1rem; display:none;"></span>
+            <!-- Icon user dropdown -->
+            <div id="userDropdownWrapper" class="dropdown" style="display:none;">
+              <button class="btn btn-link p-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="user-avatar rounded-circle bg-light d-flex align-items-center justify-content-center" style="width:44px;height:44px;">
+                  <i class="fas fa-user fa-lg text-secondary"></i>
+                </span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="#" id="profileLink"><i class="fas fa-user-lock me-2"></i>Hồ sơ</a></li>
+                <li><a class="dropdown-item" href="#" id="bookingHistoryLink"><i class="fas fa-list-ul me-2"></i>Lịch sử</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
+              </ul>
+            </div>
+            <!-- Nút đăng nhập (hiện khi chưa đăng nhập) -->
+            <a class="btn btn-outline-danger fw-bold px-3 py-2" style="border-color:DarkRed; color:DarkRed;" href="#" id="loginBtn">Đăng nhập</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Block cho nội dung chính của từng trang -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Modal Đăng Nhập -->
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="loginClose">&times;</span>
+        <h2>Login In To Account</h2>
+        <form id="login-form" action="#" onsubmit="return false;">
+          <input type="email" id="login-email" placeholder="Enter Email" required><br>
+          <!-- Ô nhập mật khẩu với nút hiện/ẩn -->
+          <div class="password-wrapper">
+            <input type="password" id="login-password" placeholder="Enter Password" required>
+            <span class="toggle-password" onclick="togglePassword('login-password', this)">
+              <img src="/static/img/eye.png" alt="Show/Hide"/>
+            </span>
+          </div>
+
+          <button type="submit" class="btn-modal-primary">Login</button>
+        </form>
+
+        <!-- Nút chuyển sang đăng ký -->
+        <button id="registerBtn" type="button" class="btn-modal-outline" style="width:100%;margin-top:12px;">Register</button>
+      </div>
+    </div>
+
+    <!-- Modal Đăng Ký -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="registerClose">&times;</span>
+        <h2>Sign Up For An Account</h2>
+        <form id="register-form" action="#" onsubmit="return false;">
+          <input type="text" id="register-fullname" placeholder="Enter Full Name" required><br>
+          <input type="email" id="register-email" placeholder="Enter Email" required><br>
+          <input type="tel" id="register-phone" placeholder="Enter Phone Number" required><br>
+          <input type="date" id="register-dob" placeholder="Enter Birthday" required><br>
+          <!-- Trường mật khẩu với chức năng hiển thị/ẩn -->
+          <div class="password-wrapper">
+            <input type="password" id="registerPassword" placeholder="Enter Password" required>
+            <span class="toggle-password" onclick="togglePassword('registerPassword', this)">
+              <img src="/static/img/eye.png" alt="Show/Hide"/>
+            </span>
+          </div>
+          <!-- Trường nhập lại mật khẩu - chức năng hiển thị/ẩn -->
+          <div class="password-wrapper">
+            <input type="password" id="registerPassword1" placeholder="Retype Password" required>
+            <span class="toggle-password" onclick="togglePassword('registerPassword1', this)">
+              <img src="/static/img/eye.png" alt="Show/Hide"/>
+            </span>
+          </div>
+          <!-- Thêm một thẻ để hiển thị lỗi -->
+          <div id="retypeError" class="error-message"></div>
+
+          <div class="mb-3">
+              <label class="form-label d-block">Giới tính:</label>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="register-gender" id="gender-male" value="Nam" checked>
+                  <label class="form-check-label" for="gender-male">Nam</label>
+              </div>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="register-gender" id="gender-female" value="Nữ">
+                  <label class="form-check-label" for="gender-female">Nữ</label>
+              </div>
+          </div>
+
+          <button type="submit" class="btn-modal-primary">Finish</button>
+        </form>
+        
+        <!-- Nút chuyển sang đăng nhập -->
+        <button id="toLogin" type="button" class="btn-modal-outline" style="width:100%;margin-top:12px;">Login</button>
+      </div>
+    </div>
+
+    <!-- Modal Hồ Sơ Khách Hàng -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="profileModalLabel">Thông Tin Khách Hàng</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body" id="profileModalBody">
+            <!-- Thông tin khách hàng sẽ được JS render vào đây -->
+            <div class="text-center text-secondary">Đang tải...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Lịch sử đặt vé -->
+    <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="historyModalLabel">Lịch sử đặt vé</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body" id="history-content">
+            <!-- JS sẽ render bảng lịch sử ở đây -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal xem chi tiết booking -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="detailModalLabel">Chi tiết đặt vé</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body" id="modalDetailBody">
+            <!-- JS sẽ render chi tiết ở đây -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Block cho các modal tùy chỉnh của từng trang -->
+    {% block extra_modals %}{% endblock %}
+
+    <!-- Đặt script.js -->
+    <script src="/static/js/script.js"></script>
+    <!-- Đặt login.js -->
+    <script src="/static/js/login.js?v=2"></script>
+    
+    <!-- Block cho JavaScript tùy chỉnh của từng trang -->
+    {% block extra_js %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="/static/img/logo.jpg" height="32" alt="Logo" class="me-2">
+                        <h5 class="mb-0" style="color: #ff9800;">Storia Cinema</h5>
+                    </div>
+                    <p class="text-muted mb-2">Trải nghiệm điện ảnh đỉnh cao</p>
+                    <p class="text-warning mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Đây là sản phẩm phục vụ cho nghiên cứu</strong>
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="text-warning mb-3">Liên hệ</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i>1900-xxxx</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i>info@storia.com</li>
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>TP. Hồ Chí Minh</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="text-warning mb-3">Theo dõi</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-youtube fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-tiktok fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-secondary my-4">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 Storia Cinema. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
